@@ -1,4 +1,6 @@
+import datetime
 import sqlite3
+from typing import Dict, List, Tuple
 
 
 DATABASE = 'sqlite3.db'
@@ -35,7 +37,9 @@ SQL_PRICES = """CREATE TABLE IF NOT EXISTS price (
     FOREIGN KEY (task_id) REFERENCES task(id)
 );"""
 
-if __name__ == '__main__':
+
+def create_db():
+    # Create database
     _conn = sqlite3.connect(DATABASE)
     _cursor = _conn.cursor()
     _cursor.execute(SQL_PRODUCTS)
@@ -45,3 +49,32 @@ if __name__ == '__main__':
     _cursor.execute(SQL_PRICES)
     _conn.commit()
     _conn.close()
+
+def prune_prices():
+    _conn = sqlite3.connect(DATABASE)
+    _cursor = _conn.cursor()
+
+    _cursor.execute("SELECT * FROM price ORDER BY created DESC;")
+    _prices: List[Tuple] = _cursor.fetchall()
+
+    _prune: Dict[Tuple[str, str], List[int]] = {}
+    for _price in _prices:
+        _price_dt_uniform = datetime.datetime.fromtimestamp(_price[3]).replace(hour=0, minute=0, second=0, microsecond=0)
+
+        if (_price[1], str(_price_dt_uniform)) not in _prune:
+            _prune[(_price[1], str(_price_dt_uniform))] = []
+            continue
+
+        _prune[(_price[1], str(_price_dt_uniform))].append(_price[0])
+    _prune = {_k:_vs for _k, _vs in _prune.items() if _vs}
+
+    for _, _vs in _prune.items():
+        for _v in _vs:
+            _cursor.execute("DELETE FROM price WHERE id=?;", (_v,))
+
+    _conn.commit()
+    _conn.close()
+
+if __name__ == '__main__':
+    create_db()
+    prune_prices()
