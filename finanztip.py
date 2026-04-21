@@ -8,6 +8,7 @@ import urllib.parse
 from typing import Any, Dict, List
 
 import bs4
+import database
 import requests
 import utils
 import xml.dom.minidom
@@ -29,7 +30,7 @@ def finanztip_get():
     # 4) Save data
 
     # 4.1) Create save path
-    _path = 'https://www.finanztip.de/daily/'
+    _path = 'www.finanztip.de/daily/'
     _path = re.sub(r'[^a-zA-Z0-9]', '_', _path)
     _path = re.sub(r'__+', '_', _path)
     _path = 'data/' + _path + datetime.datetime.now().strftime("%Y%m%d") + '.html'
@@ -38,7 +39,7 @@ def finanztip_get():
     with open(_path, mode='w') as _file:
         _file.write(_response.text)
 
-    return _response
+    return _response.text
 
 def finanztip_parse(_data: str) -> Dict[str, Any]:
     # 1) Parse HTML data
@@ -100,11 +101,11 @@ def finanztip_parse(_data: str) -> Dict[str, Any]:
             'image': {'url': str(_article_image_src), 'title': _article_image_title, 'link': _article_image_link},
         })
 
-    # 3) Return data as a JSON dict
     assert(_title is not None)
     assert(_description is not None)
     assert(_pubDate is not None)
 
+    # 4) Return data as a JSON dict
     return {
         'title': utils.clear_text(_title.get_text()),
         'description': utils.clear_text(_title.get_text()),
@@ -114,7 +115,6 @@ def finanztip_parse(_data: str) -> Dict[str, Any]:
         'pubDate': utils.clear_text(_pubDate.get_text())
     }
 
-# TODO: Return XML
 def finanztip_rss(_data: Dict[str, Any]):
     def _finanztip_date(_date: str) -> str:
         _dt = datetime.datetime.strptime(_date, "%d.%m.%Y")
@@ -157,7 +157,37 @@ def finanztip_rss(_data: Dict[str, Any]):
         # xml.etree.ElementTree.SubElement(_item_image_el, "url").text = _item["image"]["url"]
         # xml.etree.ElementTree.SubElement(_item_image_el, "type").text = "image/png"
 
+    # 4) Save Data as a file
     _xml_str = xml.etree.ElementTree.tostring(_rss, encoding="utf-8")
     _xml_raw = xml.dom.minidom.parseString(_xml_str).toprettyxml(indent='  ', encoding='utf-8')
+
+    # 4.1) Create save path
+    _path = 'www.finanztip.de/daily/'
+    _path = re.sub(r'[^a-zA-Z0-9]', '_', _path)
+    _path = re.sub(r'__+', '_', _path)
+    _path = 'data/' + _path + datetime.datetime.now().strftime("%Y%m%d") + '.rss'
+
+    # 4.2) Save data
+    with open(_path, mode='wb') as _file:
+        _file.write(_xml_raw)
+
+    # 5) Save data locally in DB
+    _conn = sqlite3.connect(database.DATABASE)
+    _cursor = _conn.cursor()
+
+    # 1) Create or update product
+    try:
+        _cursor.execute(
+            "INSERT INTO task (url, active, last) VALUES (?, 1, 0);",
+            ('https://www.finanztip.de/daily/',)
+        )
+    except Exception:
+        _cursor.execute(
+            "UPDATE task SET last=? WHERE url=?;",
+            (datetime.datetime.strptime(_data['pubDate'], "%d.%m.%Y").timestamp(), 'https://www.finanztip.de/daily/')
+        )
+    _conn.commit()
+
+    _conn.close()
 
     return _xml_raw

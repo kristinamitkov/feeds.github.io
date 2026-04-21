@@ -16,7 +16,7 @@ SQL_TASK = """CREATE TABLE IF NOT EXISTS task (
     product_id TEXT DEFAULT NULL,
     url TEXT NOT NULL UNIQUE,
     active INTEGER NOT NULL DEFAULT 1,
-    last INTEGER NOT NULL,
+    last INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (product_id) REFERENCES products(title)
 );"""
 
