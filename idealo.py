@@ -10,6 +10,7 @@ from typing import Any, Dict
 import bs4
 import database
 import requests
+import utils
 
 
 def idealo_get(_url: str):
@@ -50,12 +51,6 @@ def idealo_get(_url: str):
     return _response
 
 def idealo_parse(_data: str, _url: str) -> Dict[str, Any]:
-    # 0) Helper convert element to text and strip separator characters
-    def _idealo_parsed_text(_data_parsed: bs4.BeautifulSoup):
-        _data_parsed_text = _data_parsed.get_text()
-        _data_parsed_text = _data_parsed_text.replace('\xad', '')
-        return re.sub(r'\s+', ' ', re.sub(r'[\s\n\r\t]+', ' ', _data_parsed_text).strip()).strip()
-
     # 1) Parse HTML data
     _soup = bs4.BeautifulSoup(_data, 'html.parser')
 
@@ -81,18 +76,18 @@ def idealo_parse(_data: str, _url: str) -> Dict[str, Any]:
 
     # 3) Return data as a JSON dict
     return {
-        'title': _idealo_parsed_text(_title),
+        'title': utils.clear_text(_title.get_text()),
         'url': _url,
         'timestamp': time.time(),
-        'offers': _idealo_parsed_text(_meta_offers).rstrip(':'),
-        'prices': _idealo_parsed_text(_meta_price),
-        'grade': _idealo_parsed_text(_meta_grade),
-        'variants': _idealo_parsed_text(_variants),
+        'offers': utils.clear_text(_meta_offers.get_text()).rstrip(':'),
+        'prices': utils.clear_text(_meta_price.get_text()),
+        'grade': utils.clear_text(_meta_grade.get_text()),
+        'variants': utils.clear_text(_variants.get_text()),
         'items': [
             {
-                'title': _idealo_parsed_text(_entry[0]),
-                'price': _idealo_parsed_text(_entry[1]),
-                'shop': _idealo_parsed_text(_entry[2]),
+                'title': utils.clear_text(_entry[0].get_text()),
+                'price': utils.clear_text(_entry[1].get_text()),
+                'shop': utils.clear_text(_entry[2].get_text()),
                 'url': 'https://www.idealo.de' + _entry[3]['href'].strip()
             }
             for _entry in zip(_offers_titles, _offers_prices, _offers_shop, _offers_shop_url)
