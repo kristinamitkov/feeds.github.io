@@ -1,1 +1,3 @@
 Finanztip Daily,https://www.finanztip.de/daily/,www_finanztip_de_daily_.rss
+Tagesschau,https://www.tagesschau.de/,www_tagesschau_de_.rss
+Ugreen NASync DXP2800,https://www.idealo.de/preisvergleich/OffersOfProduct/205479003_-nasync-dxp2800-ugreen.html,www_idealo_de_preisvergleich_OffersOfProduct_205479003_nasync_dxp2800_ugreen.csv

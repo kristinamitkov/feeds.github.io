@@ -1,10 +1,6 @@
-import datetime
 import hashlib
-import pprint
 import re
 import sqlite3
-import time
-import urllib.parse
 from typing import Any, Dict, List
 
 import bs4
@@ -26,18 +22,6 @@ def finanztip_get():
 
     # 3) GET request
     _response = _session.get('https://www.finanztip.de/daily/', headers=_headers)
-
-    # 4) Save data
-
-    # 4.1) Create save path
-    _path = 'www.finanztip.de/daily/'
-    _path = re.sub(r'[^a-zA-Z0-9]', '_', _path)
-    _path = re.sub(r'__+', '_', _path)
-    _path = 'data/' + _path + datetime.datetime.now().strftime("%Y%m%d") + '.html'
-
-    # 4.2) Save data
-    with open(_path, mode='w') as _file:
-        _file.write(_response.text)
 
     return _response
 
@@ -115,12 +99,12 @@ def finanztip_parse(_data: str) -> Dict[str, Any]:
         'pubDate': utils.clear_text(_pubDate.get_text())
     }
 
-def finanztip_rss(_response: requests.Response, _data: Dict[str, Any]):
-    def _finanztip_date(_date: str) -> str:
-        _dt = datetime.datetime.strptime(_date, "%d.%m.%Y")
-        return _dt.strftime("%a, %d %b %Y %H:%M:%S GMT")
+def finanztip_rss(_data: Dict[str, Any]):
+    def _finanztip_date(_date: str):
+        _ts = utils.parse_date(_date, '%d.%m.%Y')
+        return utils.parse_timestamp(_ts, "%a, %d %b %Y %H:%M:%S GMT")
 
-    def _finanztip_link(_link: str) -> str:
+    def _finanztip_link(_link: str):
         return _link if _link.startswith('http') else ('https://www.finanztip.de' + _link)
 
     # 1) Create RSS channel as an XML element
@@ -132,7 +116,7 @@ def finanztip_rss(_response: requests.Response, _data: Dict[str, Any]):
     xml.etree.ElementTree.SubElement(_channel, "link").text = _finanztip_link(_data["link"])
     xml.etree.ElementTree.SubElement(_channel, "description").text = _data["description"]
     xml.etree.ElementTree.SubElement(_channel, "pubDate").text = _finanztip_date(_data['pubDate'])
-    xml.etree.ElementTree.SubElement(_channel, "language").text = "de-DE"
+    xml.etree.ElementTree.SubElement(_channel, "language").text = "de"
 
     _image_el = xml.etree.ElementTree.SubElement(_channel, "image")
     xml.etree.ElementTree.SubElement(_image_el, "url").text = _data["image"]["url"]
@@ -149,7 +133,6 @@ def finanztip_rss(_response: requests.Response, _data: Dict[str, Any]):
         xml.etree.ElementTree.SubElement(_item_el, "description").text = _item["description"]
         xml.etree.ElementTree.SubElement(_item_el, "pubDate").text = _finanztip_date(_item['pubDate'])
 
-        # <enclosure url="https://cdn.finanztip.de/_generate/1/4/85415/Zeitung_Sparplaene_Geld_landscape.png?class=large" type="image/png"/>
         _item_image_el = xml.etree.ElementTree.SubElement(_item_el, "enclosure")
         _item_image_el.set('url', _item["image"]["url"])
         _item_image_el.set('type', 'image/png')
@@ -157,46 +140,61 @@ def finanztip_rss(_response: requests.Response, _data: Dict[str, Any]):
         # xml.etree.ElementTree.SubElement(_item_image_el, "url").text = _item["image"]["url"]
         # xml.etree.ElementTree.SubElement(_item_image_el, "type").text = "image/png"
 
-    # 4) Save Data as a file
+    # 4) Format data
     _xml_str = xml.etree.ElementTree.tostring(_rss, encoding="utf-8")
     _xml_raw = xml.dom.minidom.parseString(_xml_str).toprettyxml(indent='  ', encoding='utf-8')
 
-    # 4.1) Create save path
+    return _xml_raw
+
+def finanztip_store(_response: requests.Response, _data: Dict[str, Any], _xml: bytes):
+    _pubDate = utils.parse_date(_data['pubDate'], "%d.%m.%Y")
+
+    # 1) Save data
+    # 1.1) Create save path
+    _path = 'www.finanztip.de/daily/'
+    _path = re.sub(r'[^a-zA-Z0-9]', '_', _path)
+    _path = re.sub(r'__+', '_', _path)
+    _path = 'data/' + _path + utils.parse_timestamp(_pubDate, '%Y%m%d') + '.html'
+
+    # 1.2) Save data
+    with open(_path, mode='wb') as _file:
+        _file.write(_response.content)
+
+    # 2) Save data
+    # 2.1) Create save path
     _path_1 = 'www.finanztip.de/daily/'
     _path_1 = re.sub(r'[^a-zA-Z0-9]', '_', _path_1)
     _path_1 = re.sub(r'__+', '_', _path_1)
 
     _path_2 = 'data/' + _path_1 + '.rss'
-    _path_1 = 'data/' + _path_1 + datetime.datetime.now().strftime("%Y%m%d") + '.rss'
+    _path_1 = 'data/' + _path_1 + utils.parse_timestamp(_pubDate, '%Y%m%d') + '.rss'
 
-    # 4.2) Save data
+    # 2.2) Save data
     with open(_path_1, mode='wb') as _file:
-        _file.write(_xml_raw)
+        _file.write(_xml)
     with open(_path_2, mode='wb') as _file:
-        _file.write(_xml_raw)
+        _file.write(_xml)
 
-    # 5) Save data locally in DB
+    # 3) Save data locally in DB
     _conn = sqlite3.connect(database.DATABASE)
     _cursor = _conn.cursor()
 
-    # 1) Create or update product
     try:
         _cursor.execute(
             "INSERT INTO task (title, url, active, last_update, last_status_code, last_status_text, last_error) VALUES (?, ?, 1, ?, ?, ?, ?);",
-            ('Finanztip Daily', 'https://www.finanztip.de/daily/', datetime.datetime.strptime(_data['pubDate'], "%d.%m.%Y").timestamp(), _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
+            (_data['title'], 'https://www.finanztip.de/daily/', _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
         )
     except Exception:
         _cursor.execute(
             "UPDATE task SET title=COALESCE(title, ?), last_update=?, last_status_code=?, last_status_text=?, last_error=?, active=1, priority=(priority+1) WHERE url=?;",
-            (_data['title'], datetime.datetime.strptime(_data['pubDate'], "%d.%m.%Y").timestamp(), _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)), 'https://www.finanztip.de/daily/')
+            (_data['title'], _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)), 'https://www.finanztip.de/daily/')
         )
     _conn.commit()
 
     _conn.close()
 
-    return _xml_raw
-
 def finanztip():
     _response = finanztip_get()
     _data_parsed = finanztip_parse(_response.text)
-    finanztip_rss(_response, _data_parsed)
+    _xml = finanztip_rss(_data_parsed)
+    finanztip_store(_response, _data_parsed, _xml)

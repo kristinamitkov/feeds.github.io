@@ -1,4 +1,3 @@
-import pprint
 import time
 import sqlite3
 import urllib.parse
@@ -7,9 +6,10 @@ from typing import List, Tuple
 import database
 import finanztip
 import idealo
+import tagesschau
 
 
-def check_update_priority(_row: Tuple) -> bool:
+def check_update_priority(_row: Tuple):
     _delta = (time.time() - _row[5]) // 10000
 
     _priority: int = _row[4]
@@ -31,7 +31,7 @@ def check_update_priority(_row: Tuple) -> bool:
 if __name__ == '__main__':
     _conn = sqlite3.connect(database.DATABASE)
     _cursor = _conn.cursor()
-    _cursor.execute('SELECT * FROM task;')
+    _cursor.execute('SELECT * FROM task WHERE active=1;')
     _rows: List[Tuple] = _cursor.fetchall()
     _conn.close()
 
@@ -39,7 +39,7 @@ if __name__ == '__main__':
         if bool(_row[5]) and (not check_update_priority(_row)):
             continue
 
-        print('Scraping', _row[1], _row[3])
+        print('Scraping', _row[1], _row[2])
 
         _url: str = _row[2]
         _url_parsed = urllib.parse.urlparse(_url)
@@ -49,3 +49,6 @@ if __name__ == '__main__':
 
         if _url == 'https://www.finanztip.de/daily/':
             finanztip.finanztip()
+
+        if _url == 'https://www.tagesschau.de/':
+            tagesschau.tagesschau()
