@@ -107,8 +107,11 @@ def add_task(_title: Optional[str], _url: str):
     _conn.close()
 
 def import_prices(_import: str):
-    with open(_import, mode='r') as _file:
-        _prices: List[Tuple] = [tuple(_entry.split(',')) for _entry in _file.readlines()[1:]]
+    try:
+        with open(_import, mode='r') as _file:
+            _prices: List[Tuple] = [tuple(_entry.split(',')) for _entry in _file.readlines()[1:]]
+    except Exception as e:
+        return
 
     _conn = sqlite3.connect(DATABASE)
     _cursor = _conn.cursor()
@@ -133,6 +136,7 @@ def export_prices(_url: str, _export: str):
     with open(_export, mode='w') as _file:
         _file.write('product_id,task_id,url,created,price,currency,offers,status_code,status_text,error\n')
         _file.write('\n'.join(_prices))
+        _file.write('\n')
 
     _conn.commit()
     _conn.close()
