@@ -162,13 +162,17 @@ def finanztip_rss(_data: Dict[str, Any]):
     _xml_raw = xml.dom.minidom.parseString(_xml_str).toprettyxml(indent='  ', encoding='utf-8')
 
     # 4.1) Create save path
-    _path = 'www.finanztip.de/daily/'
-    _path = re.sub(r'[^a-zA-Z0-9]', '_', _path)
-    _path = re.sub(r'__+', '_', _path)
-    _path = 'data/' + _path + datetime.datetime.now().strftime("%Y%m%d") + '.rss'
+    _path_1 = 'www.finanztip.de/daily/'
+    _path_1 = re.sub(r'[^a-zA-Z0-9]', '_', _path_1)
+    _path_1 = re.sub(r'__+', '_', _path_1)
+
+    _path_2 = 'data/' + _path_1 + '.rss'
+    _path_1 = 'data/' + _path_1 + datetime.datetime.now().strftime("%Y%m%d") + '.rss'
 
     # 4.2) Save data
-    with open(_path, mode='wb') as _file:
+    with open(_path_1, mode='wb') as _file:
+        _file.write(_xml_raw)
+    with open(_path_2, mode='wb') as _file:
         _file.write(_xml_raw)
 
     # 5) Save data locally in DB
