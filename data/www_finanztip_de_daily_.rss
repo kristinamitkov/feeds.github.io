@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
-    <title>TÃ¤glich die neuesten Geldthemen</title>
+    <title>Täglich die neuesten Geldthemen</title>
     <link>https://www.finanztip.de/daily/</link>
-    <description>TÃ¤glich die neuesten Geldthemen</description>
-    <pubDate>Tue, 21 Apr 2026 00:00:00 GMT</pubDate>
+    <description>Täglich die neuesten Geldthemen</description>
+    <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
     <language>de-DE</language>
     <image>
       <url>https://cdn.finanztip.de/user_upload/man_on_banknote_with_mobile_phone.png</url>
       <title>Finanztip Daily</title>
       <link>https://cdn.finanztip.de</link>
     </image>
+    <item>
+      <title>Passwort-Chaos: Die 8 wichtigsten Fragen und Antworten</title>
+      <link>https://www.finanztip.de/daily/passwort-chaos-die-8-wichtigsten-fragen-und-antworten/</link>
+      <guid>f8a7f1ecf7c367b96a123246f9c60e0799c4e732c535764b1d0678ebe7d4ffd5</guid>
+      <description>Passwort-Chaos: Die 8 wichtigsten Fragen und Antworten</description>
+      <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
+      <enclosure url="https://cdn.finanztip.de/_generate/1/5/86401/Unterstuetzerfrage_der_Woche_landscape.png?class=large" type="image/png"/>
+    </item>
     <item>
       <title>Wie gut sind die Steuerprogramme von Aldi und Lidl?</title>
       <link>https://www.finanztip.de/daily/wie-gut-sind-die-steuerprogramme-von-aldi-und-lidl/</link>
@@ -44,10 +52,10 @@
       <enclosure url="https://cdn.finanztip.de/_generate/1/5/86341/Urlaub_Reise_Flugzeug_Flugchaos_landscape.png?class=large" type="image/png"/>
     </item>
     <item>
-      <title>So lange dauert es, bis Du 100.000 â¬ hast</title>
+      <title>So lange dauert es, bis Du 100.000 € hast</title>
       <link>https://www.finanztip.de/daily/so-lange-dauert-es-bis-du-100000-eur-hast/</link>
       <guid>510090dc58078c0405ae8a28b522d0834ee8e5333f03a676235775f9d955a327</guid>
-      <description>So lange dauert es, bis Du 100.000 â¬ hast</description>
+      <description>So lange dauert es, bis Du 100.000 € hast</description>
       <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
       <enclosure url="https://cdn.finanztip.de/_generate/1/5/86335/Badewanne_Geldscheine_Frau_landscape.png?class=large" type="image/png"/>
     </item>
@@ -68,10 +76,10 @@
       <enclosure url="https://cdn.finanztip.de/_generate/1/4/85415/Zeitung_Sparplaene_Geld_landscape.png?class=large" type="image/png"/>
     </item>
     <item>
-      <title>Gasheizung: Neues Gesetz erhÃ¶ht Dein finanzielles Risiko</title>
+      <title>Gasheizung: Neues Gesetz erhöht Dein finanzielles Risiko</title>
       <link>https://www.finanztip.de/daily/gasheizung-neues-gesetz-erhoeht-dein-finanzielles-risiko/</link>
       <guid>d43aef5c16f1ba5047544c506571c39096b35e34e92dc4c29142c7256e5f0e98</guid>
-      <description>Gasheizung: Neues Gesetz erhÃ¶ht Dein finanzielles Risiko</description>
+      <description>Gasheizung: Neues Gesetz erhöht Dein finanzielles Risiko</description>
       <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
       <enclosure url="https://cdn.finanztip.de/_generate/1/4/85839/Heizung_Heizen_Gas_Gasheizung_square.png?class=squareSmall" type="image/png"/>
     </item>
@@ -84,18 +92,18 @@
       <enclosure url="https://cdn.finanztip.de/_generate/1/5/86073/ETF-Ranglisten-Serie_ETF-Ranking_landscape.png?class=large" type="image/png"/>
     </item>
     <item>
-      <title>Bis zu 6.250 â¬: Zuschuss fÃ¼r barrierefreies Wohnen wieder da</title>
+      <title>Bis zu 6.250 €: Zuschuss für barrierefreies Wohnen wieder da</title>
       <link>https://www.finanztip.de/daily/bis-zu-6250-eur-zuschuss-fuer-barrierefreies-wohnen-wieder-da/</link>
       <guid>f5810d993f7da66ed80540397eeaa2b93431304e237b636f93dbbd0e38b548b2</guid>
-      <description>Bis zu 6.250 â¬: Zuschuss fÃ¼r barrierefreies Wohnen wieder da</description>
+      <description>Bis zu 6.250 €: Zuschuss für barrierefreies Wohnen wieder da</description>
       <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
       <enclosure url="https://cdn.finanztip.de/_generate/1/4/85817/Immo_Haus_Immobilie_Muenzen_Geld_Geldstapel_square.png?class=squareSmall" type="image/png"/>
     </item>
     <item>
-      <title>ETF kaufen â spielt der Handelsplatz eine Rolle?</title>
+      <title>ETF kaufen – spielt der Handelsplatz eine Rolle?</title>
       <link>https://www.finanztip.de/daily/etf-kaufen-spielt-der-handelsplatz-eine-rolle/</link>
       <guid>fc8f09eceb44d09fdf6f6bafb89caf3799d8938bf4c8f194f898cd2031e4b35d</guid>
-      <description>ETF kaufen â spielt der Handelsplatz eine Rolle?</description>
+      <description>ETF kaufen – spielt der Handelsplatz eine Rolle?</description>
       <pubDate>Fri, 17 Apr 2026 00:00:00 GMT</pubDate>
       <enclosure url="https://cdn.finanztip.de/_generate/1/5/86083/Unterstuetzerfrage_der_Woche_landscape.png?class=large" type="image/png"/>
     </item>
@@ -108,18 +116,18 @@
       <enclosure url="https://cdn.finanztip.de/_generate/1/2/77361/Deals_Schnaeppchen_landscape.png?class=large" type="image/png"/>
     </item>
     <item>
-      <title>FÃ¼r UnterstÃ¼tzer: Glasfasertarife â was ist nÃ¶tig und was gÃ¼nstig?</title>
+      <title>Für Unterstützer: Glasfasertarife – was ist nötig und was günstig?</title>
       <link>https://www.finanztip.de/daily/fuer-unterstuetzer-glasfasertarife-was-ist-noetig-und-was-guenstig/</link>
       <guid>cd926f513d804e32498e0b3f2ffaf944c818d2b6e9e26c12fc415d755be4b249</guid>
-      <description>FÃ¼r UnterstÃ¼tzer: Glasfasertarife â was ist nÃ¶tig und was gÃ¼nstig?</description>
+      <description>Für Unterstützer: Glasfasertarife – was ist nötig und was günstig?</description>
       <pubDate>Fri, 17 Apr 2026 00:00:00 GMT</pubDate>
       <enclosure url="https://cdn.finanztip.de/_generate/1/4/85779/App_Teaser_Manuel_neu_square.jpg?class=squareSmall" type="image/png"/>
     </item>
     <item>
-      <title>Krankenkasse noch teurer? Diese PlÃ¤ne sollen es verhindern</title>
+      <title>Krankenkasse noch teurer? Diese Pläne sollen es verhindern</title>
       <link>https://www.finanztip.de/daily/fuer-stabile-krankenkassen-beitraege-das-ist-der-erste-plan/</link>
       <guid>91f58747e287e154bf135b6252a11e4ad32db2847caf71b9463afca0f77f7abb</guid>
-      <description>Krankenkasse noch teurer? Diese PlÃ¤ne sollen es verhindern</description>
+      <description>Krankenkasse noch teurer? Diese Pläne sollen es verhindern</description>
       <pubDate>Fri, 17 Apr 2026 00:00:00 GMT</pubDate>
       <enclosure url="https://cdn.finanztip.de/_generate/1/4/85843/Krank_Krankenkasse_Stethoskop_Schild_Krankenversicherung_square.png?class=squareSmall" type="image/png"/>
     </item>
@@ -140,10 +148,10 @@
       <enclosure url="https://cdn.finanztip.de/_generate/1/4/85959/Wiso_Steuer_Laptop_Frau_Muenzen_Check_24_square.png?class=squareSmall" type="image/png"/>
     </item>
     <item>
-      <title>Spiel Gesundheitsministerin: Wie wÃ¼rdest Du die Krankenkassen retten?</title>
+      <title>Spiel Gesundheitsministerin: Wie würdest Du die Krankenkassen retten?</title>
       <link>https://www.finanztip.de/daily/spiel-gesundheitsminister-wie-wuerdest-du-die-krankenkassen-retten/</link>
       <guid>8042d7300b6ed21e505a517899e9bec546e0932747ddbf4efe0796bc1fd29e0c</guid>
-      <description>Spiel Gesundheitsministerin: Wie wÃ¼rdest Du die Krankenkassen retten?</description>
+      <description>Spiel Gesundheitsministerin: Wie würdest Du die Krankenkassen retten?</description>
       <pubDate>Thu, 16 Apr 2026 00:00:00 GMT</pubDate>
       <enclosure url="https://cdn.finanztip.de/_generate/1/5/86071/Waage_Krankenkassen_erhoehen_landscape.png?class=large" type="image/png"/>
     </item>
@@ -156,20 +164,12 @@
       <enclosure url="https://cdn.finanztip.de/_generate/1/4/85957/Geld_Zinsen_Zinskurve_Muenzen_Pfeil_nach_oben_landscape.png?class=large" type="image/png"/>
     </item>
     <item>
-      <title>Neuer Rekord: MSCI World &amp; Co. erreichen HÃ¶chststÃ¤nde</title>
+      <title>Neuer Rekord: MSCI World &amp; Co. erreichen Höchststände</title>
       <link>https://www.finanztip.de/daily/neuer-rekord-msci-world-co-erreichen-hoechststaende/</link>
       <guid>fa2e84b3f6ad024995e6e245499ae3a0b13086f5354288a5ba60fb7db248dbd7</guid>
-      <description>Neuer Rekord: MSCI World &amp; Co. erreichen HÃ¶chststÃ¤nde</description>
+      <description>Neuer Rekord: MSCI World &amp; Co. erreichen Höchststände</description>
       <pubDate>Thu, 16 Apr 2026 00:00:00 GMT</pubDate>
       <enclosure url="https://cdn.finanztip.de/_generate/1/5/86051/Rakete_nach_oben_Pfeil_MSCIW_landscape.png?class=large" type="image/png"/>
-    </item>
-    <item>
-      <title>Machst Du diesen Urlaubs-Fehler?</title>
-      <link>https://www.finanztip.de/daily/machst-du-diesen-urlaubs-fehler/</link>
-      <guid>01e5f54409d2cd213c1cbfffce698f407106b805f8799fea3a66f8328b221091</guid>
-      <description>Machst Du diesen Urlaubs-Fehler?</description>
-      <pubDate>Thu, 16 Apr 2026 00:00:00 GMT</pubDate>
-      <enclosure url="https://cdn.finanztip.de/_generate/1/4/85845/Flugzeug_Urlaub_Flieger_Reise_landscape.png?class=large" type="image/png"/>
     </item>
   </channel>
 </rss>
