@@ -1,4 +1,3 @@
-import pprint
 import time
 import sqlite3
 import urllib.parse
