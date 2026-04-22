@@ -5,6 +5,11 @@ def clear_text(_text: str) -> str:
     _text = _text.replace('\xad', '')
     _text = re.sub(r'\s+', ' ', re.sub(r'[\s\n\r\t]+', ' ', _text).strip()).strip()
 
+    try:
+        _text = _text.encode('latin1').decode('utf-8')
+    except Exception as e:
+        pass
+
     return _text
 
 def get_origin(_url: str) -> str:

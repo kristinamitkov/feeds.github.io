@@ -12,6 +12,7 @@ SQL_TASK = """CREATE TABLE IF NOT EXISTS task (
     title TEXT DEFAULT NULL,
     url TEXT NOT NULL UNIQUE,
     active INTEGER NOT NULL DEFAULT 1,
+    priority INTEGER NOT NULL DEFAULT 25,
     last_update INTEGER DEFAULT NULL,
     last_status_code INTEGER DEFAULT NULL,
     last_status_text TEXT DEFAULT NULL,
