@@ -92,7 +92,7 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
 
     # 1) Save data
     # 1.1) Parse URL
-    _url_parsed = urllib.parse.urlparse(_response.request.url or '')
+    _url_parsed = urllib.parse.urlparse(_data['link'] or '')
 
     # 1.2) Create save path
     _path = _url_parsed.netloc + _url_parsed.path[:-5]
@@ -133,10 +133,10 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
 
     # 4) Add price point
     _cursor.execute(
-        """INSERT INTO price (product_id, task_id, created, price, currency, offers, status_code, status_text, error)
-            VALUES (?, ?, ?, ?, 'EUR', ?, ?, ?, ?);
+        """INSERT INTO price (product_id, task_id, url, created, price, currency, offers, status_code, status_text, error)
+            VALUES (?, ?, ?, ?, ?, 'EUR', ?, ?, ?, ?);
         """,
-        (_data['title'], _task, _pubDate, _data_price, _data_offers, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
+        (_data['title'], _task, _data['link'], _pubDate, _data_price, _data_offers, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
     )
     _conn.commit()
 

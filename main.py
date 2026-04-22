@@ -31,7 +31,7 @@ def check_update_priority(_row: Tuple):
 if __name__ == '__main__':
     _conn = sqlite3.connect(database.DATABASE)
     _cursor = _conn.cursor()
-    _cursor.execute('SELECT * FROM task;')
+    _cursor.execute('SELECT * FROM task WHERE active=1;')
     _rows: List[Tuple] = _cursor.fetchall()
     _conn.close()
 
