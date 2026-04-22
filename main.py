@@ -10,7 +10,7 @@ import idealo
 import tagesschau
 
 
-def check_update_priority(_row: Tuple) -> bool:
+def check_update_priority(_row: Tuple):
     _delta = (time.time() - _row[5]) // 10000
 
     _priority: int = _row[4]

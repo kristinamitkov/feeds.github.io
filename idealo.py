@@ -1,9 +1,5 @@
-import datetime
-import hashlib # TODO:  hashlib.sha256(_item_raw['title'].encode("utf-8")).hexdigest()
-import pprint
 import re
 import sqlite3
-import time
 import urllib.parse
 from typing import Any, Dict
 
@@ -30,23 +26,6 @@ def idealo_get(_url: str):
 
     # 4) GET request
     _response = _session.get(_url, headers=_headers)
-
-    # 5) Return data
-    _data = _response.text
-
-    # 6) Save data
-    # 6.1) Parse URL
-    _url_parsed = urllib.parse.urlparse(_url)
-
-    # 6.2) Create save path
-    _path = _url_parsed.netloc + _url_parsed.path[:-5]
-    _path = re.sub(r'[^a-zA-Z0-9]', '_', _path)
-    _path = re.sub(r'__+', '_', _path)
-    _path = 'data/' + _path + '_' + datetime.datetime.now().strftime("%Y%m%d") + '.html'
-
-    # 6.3) Save data
-    with open(_path, mode='w') as _file:
-        _file.write(_data)
 
     return _response
 
@@ -98,10 +77,9 @@ def idealo_parse(_data: str, _link: str) -> Dict[str, Any]:
     }
 
 def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
-    def _idealo_date(_date: str) -> float:
-        _date = re.search(r'\d{2}\.\d{2}\.\d{4}', _date.strip()).group()
-        _dt = datetime.datetime.strptime(_date, "%d.%m.%Y")
-        return _dt.timestamp()
+    def _idealo_date(_date: str):
+        _date = re.search(r'\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{1,2}', _date.strip()).group()
+        return utils.parse_date(_date, "%d.%m.%Y %H:%M")
 
     # 0) Pre-process some data
     _data_offers = int(re.search(r'[0-9]+', _data['offers']).group())
@@ -112,7 +90,21 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
 
     _pubDate = _idealo_date(_data['pubDate'])
 
-    # 1) Get or create task
+    # 1) Save data
+    # 1.1) Parse URL
+    _url_parsed = urllib.parse.urlparse(_response.request.url or '')
+
+    # 1.2) Create save path
+    _path = _url_parsed.netloc + _url_parsed.path[:-5]
+    _path = re.sub(r'[^a-zA-Z0-9]', '_', _path)
+    _path = re.sub(r'__+', '_', _path)
+    _path = 'data/' + _path + '_' + utils.parse_timestamp(_pubDate, '%Y%m%d') + '.html'
+
+    # 1.3) Save data
+    with open(_path, mode='wb') as _file:
+        _file.write(_response.content)
+
+    # 2) Get or create task
     try:
         _cursor.execute(
             "INSERT INTO task (title, url, active, last_update, last_status_code, last_status_text, last_error) VALUES (?, ?, 1, ?, ?, ?, ?) RETURNING id;",
@@ -126,7 +118,7 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
     _task = _cursor.fetchone()[0]
     _conn.commit()
 
-    # 2) Create or update product
+    # 3) Create or update product
     try:
         _cursor.execute(
             "INSERT INTO products (title, url, currency, base_price, last_price, last_update, active) VALUES (?, ?, 'EUR', ?, ?, ?, 1);",
@@ -139,7 +131,7 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
         )
     _conn.commit()
 
-    # 3) Add price point
+    # 4) Add price point
     _cursor.execute(
         """INSERT INTO price (product_id, task_id, created, price, currency, offers, status_code, status_text, error)
             VALUES (?, ?, ?, ?, 'EUR', ?, ?, ?, ?);

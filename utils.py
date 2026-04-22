@@ -1,7 +1,16 @@
+import datetime
 import re
 import urllib.parse
 
-def clear_text(_text: str) -> str:
+def parse_timestamp(_ts: float, _format: str):
+    _dt = datetime.datetime.fromtimestamp(_ts)
+    return datetime.datetime.strftime(_dt, _format)
+
+def parse_date(_date: str, _format: str):
+    _dt = datetime.datetime.strptime(_date, _format)
+    return _dt.timestamp()
+
+def clear_text(_text: str):
     _text = _text.replace('\xad', '')
     _text = re.sub(r'\s+', ' ', re.sub(r'[\s\n\r\t]+', ' ', _text).strip()).strip()
 
@@ -12,6 +21,6 @@ def clear_text(_text: str) -> str:
 
     return _text
 
-def get_origin(_url: str) -> str:
+def get_origin(_url: str):
     _url_parsed = urllib.parse.urlparse(_url)
     return _url_parsed.scheme + '://' + _url_parsed.netloc
