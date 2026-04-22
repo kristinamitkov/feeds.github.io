@@ -1,0 +1,60 @@
+name: Daily Scrape
+
+on:
+  push:
+      branches:
+        - main
+        - live
+      paths-ignore:
+      - 'data/**'
+  schedule:
+    - cron: "0 6 * * *"  # runs daily at 06:00 UTC
+  workflow_dispatch:     # allows manual trigger
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: live
+          fetch-depth: 0
+
+      - name: Clean data directory
+        run: rm -rf data/* && touch data/.gitkeep
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt || true
+
+      - name: Initialize database
+        run: |
+          python database.py
+          bash database.sh
+
+      - name: Run scraper
+        run: python main.py
+
+      - name: Commit and push data directory
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          bash database.sh
+
+          # Only commit if there are changes
+          git diff --cached --quiet || git commit -m "Update scraped data $(date -u +'%Y-%m-%d')"
+
+          git push origin live
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./data
