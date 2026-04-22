@@ -187,7 +187,7 @@ def finanztip_rss(_response: requests.Response, _data: Dict[str, Any]):
         )
     except Exception:
         _cursor.execute(
-            "UPDATE task SET title=COALESCE(title, ?), last_update=?, last_status_code=?, last_status_text=?, last_error=?, active=1 WHERE url=?;",
+            "UPDATE task SET title=COALESCE(title, ?), last_update=?, last_status_code=?, last_status_text=?, last_error=?, active=1, priority=(priority+1) WHERE url=?;",
             (_data['title'], datetime.datetime.strptime(_data['pubDate'], "%d.%m.%Y").timestamp(), _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)), 'https://www.finanztip.de/daily/')
         )
     _conn.commit()
