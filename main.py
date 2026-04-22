@@ -22,4 +22,4 @@ if __name__ == '__main__':
             idealo.idealo(_url)
 
         if _url_parsed.netloc == 'www.finanztip.de':
-            finanztip.finanztip_rss(finanztip.finanztip_parse(finanztip.finanztip_get()))
+            finanztip.finanztip()

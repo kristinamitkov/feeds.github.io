@@ -39,7 +39,7 @@ def finanztip_get():
     with open(_path, mode='w') as _file:
         _file.write(_response.text)
 
-    return _response.text
+    return _response
 
 def finanztip_parse(_data: str) -> Dict[str, Any]:
     # 1) Parse HTML data
@@ -115,7 +115,7 @@ def finanztip_parse(_data: str) -> Dict[str, Any]:
         'pubDate': utils.clear_text(_pubDate.get_text())
     }
 
-def finanztip_rss(_data: Dict[str, Any]):
+def finanztip_rss(_response: requests.Response, _data: Dict[str, Any]):
     def _finanztip_date(_date: str) -> str:
         _dt = datetime.datetime.strptime(_date, "%d.%m.%Y")
         return _dt.strftime("%a, %d %b %Y %H:%M:%S GMT")
@@ -182,16 +182,21 @@ def finanztip_rss(_data: Dict[str, Any]):
     # 1) Create or update product
     try:
         _cursor.execute(
-            "INSERT INTO task (url, active, last) VALUES (?, 1, 0);",
-            ('https://www.finanztip.de/daily/',)
+            "INSERT INTO task (title, url, active, last_update, last_status_code, last_status_text, last_error) VALUES (?, ?, 1, ?, ?, ?, ?);",
+            ('Finanztip Daily', 'https://www.finanztip.de/daily/', datetime.datetime.strptime(_data['pubDate'], "%d.%m.%Y").timestamp(), _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
         )
     except Exception:
         _cursor.execute(
-            "UPDATE task SET last=? WHERE url=?;",
-            (datetime.datetime.strptime(_data['pubDate'], "%d.%m.%Y").timestamp(), 'https://www.finanztip.de/daily/')
+            "UPDATE task SET title=COALESCE(title, ?), last_update=?, last_status_code=?, last_status_text=?, last_error=?, active=1 WHERE url=?;",
+            (_data['title'], datetime.datetime.strptime(_data['pubDate'], "%d.%m.%Y").timestamp(), _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)), 'https://www.finanztip.de/daily/')
         )
     _conn.commit()
 
     _conn.close()
 
     return _xml_raw
+
+def finanztip():
+    _response = finanztip_get()
+    _data_parsed = finanztip_parse(_response.text)
+    finanztip_rss(_response, _data_parsed)

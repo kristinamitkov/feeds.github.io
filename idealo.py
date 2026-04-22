@@ -102,42 +102,34 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
     _conn = sqlite3.connect(database.DATABASE)
     _cursor = _conn.cursor()
 
-    # 1) Create or update product
+    # 1) Get or create task
     try:
         _cursor.execute(
-            "INSERT INTO products VALUES (?, ?, ?, ?);",
-            (_data['title'], _data['url'], 'EUR', 1)
-        )
-    except Exception:
-        _cursor.execute(
-            "UPDATE products SET currency='EUR', active=1 WHERE title=? AND url=?;",
-            (_data['title'], _data['url'])
-        )
-    _conn.commit()
-
-    # 2) Update task
-    _cursor.execute(
-        "UPDATE task SET last=? WHERE product_id=? AND url=?;",
-        (_data['timestamp'], _data['title'], _data['url'])
-    )
-    _conn.commit()
-
-    # 3) Get or create task
-    try:
-        _cursor.execute(
-            "INSERT INTO task (product_id, url, last) VALUES (?, ?, ?) RETURNING id;",
-            (_data['title'], _data['url'], _data['timestamp'])
+            "INSERT INTO task (title, url, active, last_update, last_status_code, last_status_text, last_error) VALUES (?, ?, 1, ?, ?, ?, ?) RETURNING id;",
+            (_data['title'], _data['url'], _data['timestamp'], _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
         )
     except Exception as e:
         _cursor.execute(
-            "UPDATE task SET last = ? WHERE product_id = ? AND url = ? RETURNING id;",
-            (_data['timestamp'], _data['title'], _data['url'])
+            "UPDATE task SET title=COALESCE(title, ?), last_update = ?, last_status_code=?, last_status_text=?, last_error=?, active=1 WHERE url = ? RETURNING id;",
+            (_data['title'], _data['timestamp'], _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)), _data['url'])
         )
     _task = _cursor.fetchone()[0]
-    assert(bool(_task))
     _conn.commit()
 
-    # 4) Add price point
+    # 2) Create or update product
+    try:
+        _cursor.execute(
+            "INSERT INTO products (title, url, currency, base_price, last_price, last_update, active) VALUES (?, ?, 'EUR', ?, ?, ?, 1);",
+            (_data['title'], _data['url'], _data_price, _data_price, _data['timestamp'])
+        )
+    except Exception:
+        _cursor.execute(
+            "UPDATE products SET currency='EUR', active=1, last_price=?, last_update=? WHERE url=?;",
+            (_data_price, _data['timestamp'], _data['url'])
+        )
+    _conn.commit()
+
+    # 3) Add price point
     _cursor.execute(
         """INSERT INTO price (product_id, task_id, created, price, currency, offers, status_code, status_text, error)
             VALUES (?, ?, ?, ?, 'EUR', ?, ?, ?, ?);
@@ -149,6 +141,6 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
     _conn.close()
 
 def idealo(URL: str):
-    RESPONSE = idealo_get(URL)
-    DATA_PARSED = idealo_parse(RESPONSE.text, URL)
-    idealo_store(RESPONSE, DATA_PARSED)
+    _response = idealo_get(URL)
+    _data_parsed = idealo_parse(_response.text, URL)
+    idealo_store(_response, _data_parsed)
