@@ -52,10 +52,26 @@ jobs:
 
           bash database.sh
 
-          # Only commit if there are changes
-          git diff --cached --quiet || git commit -m "Update scraped data $(date -u +'%Y-%m-%d')"
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
 
-          git push origin live
+          LAST_AUTHOR_NAME="$(git log -1 --pretty=%an || true)"
+          LAST_AUTHOR_EMAIL="$(git log -1 --pretty=%ae || true)"
+          LAST_SUBJECT="$(git log -1 --pretty=%s || true)"
+
+          if [ "$LAST_AUTHOR_NAME" = "github-actions" ] && \
+             [ "$LAST_AUTHOR_EMAIL" = "github-actions@github.com" ] && \
+             [[ "$LAST_SUBJECT" == Update\ scraped\ data* ]]; then
+            echo "Last commit is an Actions scrape commit; amending it."
+            git commit --amend -m "Update scraped data $(date -u +'%Y-%m-%d')"
+            git push --force-with-lease origin live
+          else
+            echo "Last commit is not an Actions scrape commit; creating a new commit."
+            git commit -m "Update scraped data $(date -u +'%Y-%m-%d')"
+            git push origin live
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
