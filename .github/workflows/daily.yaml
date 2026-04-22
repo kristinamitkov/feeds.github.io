@@ -38,12 +38,13 @@ jobs:
           pip install -r requirements.txt || true
 
       - name: Initialize database
-        run: |
-          python database.py
-          bash database.sh
+        run: bash database.sh --init
 
       - name: Run scraper
         run: python main.py
+
+      - name: Export database
+        run: bash database.sh
 
       - name: Commit and push data directory
         run: |
