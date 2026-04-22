@@ -149,7 +149,6 @@ def finanztip_rss(_response: requests.Response, _data: Dict[str, Any]):
         xml.etree.ElementTree.SubElement(_item_el, "description").text = _item["description"]
         xml.etree.ElementTree.SubElement(_item_el, "pubDate").text = _finanztip_date(_item['pubDate'])
 
-        # <enclosure url="https://cdn.finanztip.de/_generate/1/4/85415/Zeitung_Sparplaene_Geld_landscape.png?class=large" type="image/png"/>
         _item_image_el = xml.etree.ElementTree.SubElement(_item_el, "enclosure")
         _item_image_el.set('url', _item["image"]["url"])
         _item_image_el.set('type', 'image/png')
@@ -179,11 +178,11 @@ def finanztip_rss(_response: requests.Response, _data: Dict[str, Any]):
     _conn = sqlite3.connect(database.DATABASE)
     _cursor = _conn.cursor()
 
-    # 1) Create or update product
+    # 6) Create or update task
     try:
         _cursor.execute(
             "INSERT INTO task (title, url, active, last_update, last_status_code, last_status_text, last_error) VALUES (?, ?, 1, ?, ?, ?, ?);",
-            ('Finanztip Daily', 'https://www.finanztip.de/daily/', datetime.datetime.strptime(_data['pubDate'], "%d.%m.%Y").timestamp(), _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
+            (_data['title'], 'https://www.finanztip.de/daily/', datetime.datetime.strptime(_data['pubDate'], "%d.%m.%Y").timestamp(), _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
         )
     except Exception:
         _cursor.execute(

@@ -7,6 +7,7 @@ from typing import List, Tuple
 import database
 import finanztip
 import idealo
+import tagesschau
 
 
 def check_update_priority(_row: Tuple) -> bool:
@@ -39,7 +40,7 @@ if __name__ == '__main__':
         if bool(_row[5]) and (not check_update_priority(_row)):
             continue
 
-        print('Scraping', _row[1], _row[3])
+        print('Scraping', _row[1], _row[2])
 
         _url: str = _row[2]
         _url_parsed = urllib.parse.urlparse(_url)
@@ -49,3 +50,6 @@ if __name__ == '__main__':
 
         if _url == 'https://www.finanztip.de/daily/':
             finanztip.finanztip()
+
+        if _url == 'https://www.tagesschau.de/':
+            tagesschau.tagesschau()
