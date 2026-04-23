@@ -67,10 +67,12 @@ def create_db():
     _conn.close()
 
 def prune_prices():
+    print('Pruning DB')
+
     _conn = sqlite3.connect(DATABASE)
     _cursor = _conn.cursor()
 
-    _cursor.execute("SELECT * FROM price ORDER BY created DESC;")
+    _cursor.execute("SELECT * FROM price ORDER BY created DESC, id DESC;")
     _prices: List[Tuple] = _cursor.fetchall()
 
     _prune: Dict[Tuple[str, str], List[int]] = {}
@@ -93,7 +95,7 @@ def prune_prices():
     _conn.close()
 
 def add_task(_title: Optional[str], _url: str):
-    print('Adding task', _title, _url)
+    print('Adding task to DB', _title, _url)
 
     _conn = sqlite3.connect(DATABASE)
     _cursor = _conn.cursor()
@@ -107,9 +109,11 @@ def add_task(_title: Optional[str], _url: str):
     _conn.close()
 
 def import_prices(_import: str):
+    print('Importing to DB', _import)
+
     try:
         with open(_import, mode='r') as _file:
-            _prices: List[Tuple] = [tuple(_entry.split(',')) for _entry in _file.readlines()[1:]]
+            _prices: List[Tuple] = [tuple(_entry.split(',')) for _entry in _file.readlines()[1:] if _entry.strip()]
     except Exception as e:
         return
 
@@ -127,6 +131,8 @@ def import_prices(_import: str):
     _conn.close()
 
 def export_prices(_url: str, _export: str):
+    print('Exporting DB', _url, _export)
+
     _conn = sqlite3.connect(DATABASE)
     _cursor = _conn.cursor()
 
@@ -136,7 +142,6 @@ def export_prices(_url: str, _export: str):
     with open(_export, mode='w') as _file:
         _file.write('product_id,task_id,url,created,price,currency,offers,status_code,status_text,error\n')
         _file.write('\n'.join(_prices))
-        _file.write('\n')
 
     _conn.commit()
     _conn.close()
@@ -162,7 +167,6 @@ if __name__ == '__main__':
         prune_prices()
 
     if _args['url'] and _args['export']:
-        import_prices(_args['export'])
         export_prices(_args['url'], _args['export'])
     elif _args['url']:
         assert(_args['url'].startswith('http://') or _args['url'].startswith('https://'))
