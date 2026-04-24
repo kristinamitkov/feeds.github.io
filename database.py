@@ -1,12 +1,20 @@
 import argparse
 import datetime
 import sqlite3
-import sys
-from typing import Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple
 
 
 DATABASE = 'sqlite3.db'
 
+MODULES: Dict[str, Callable] = {}
+def run_modules():
+    from modules.finanztip import finanztip
+    from modules.idealo import idealo
+    from modules.tagesschau import tagesschau
+
+    MODULES["www.idealo.de"] = idealo
+    MODULES["https://www.finanztip.de/daily/"] = finanztip
+    MODULES["https://www.tagesschau.de/"] = tagesschau
 
 # TODO: minutes DEFAULT 360?
 SQL_TASK = """CREATE TABLE IF NOT EXISTS task (
@@ -21,7 +29,7 @@ SQL_TASK = """CREATE TABLE IF NOT EXISTS task (
     last_error TEXT DEFAULT NULL
 );"""
 
-SQL_PRODUCTS = """CREATE TABLE IF NOT EXISTS products (
+SQL_PRODUCT = """CREATE TABLE IF NOT EXISTS product (
     title TEXT PRIMARY KEY,
     url TEXT NOT NULL UNIQUE,
     currency TEXT NOT NULL DEFAULT 'EUR',
@@ -32,7 +40,7 @@ SQL_PRODUCTS = """CREATE TABLE IF NOT EXISTS products (
     FOREIGN KEY (title) REFERENCES task(title)
 );"""
 
-SQL_PRICES = """CREATE TABLE IF NOT EXISTS price (
+SQL_PRICE = """CREATE TABLE IF NOT EXISTS price (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     product_id TEXT NOT NULL,
     task_id INTEGER NOT NULL,
@@ -44,7 +52,7 @@ SQL_PRICES = """CREATE TABLE IF NOT EXISTS price (
     status_code INTEGER NOT NULL,
     status_text TEXT NOT NULL,
     error TEXT DEFAULT NULL,
-    FOREIGN KEY (product_id) REFERENCES products(title),
+    FOREIGN KEY (product_id) REFERENCES product(title),
     FOREIGN KEY (task_id) REFERENCES task(id)
 );"""
 
@@ -58,10 +66,10 @@ def create_db():
     _cursor.execute(SQL_TASK)
     _conn.commit()
 
-    _cursor.execute(SQL_PRODUCTS)
+    _cursor.execute(SQL_PRODUCT)
     _conn.commit()
 
-    _cursor.execute(SQL_PRICES)
+    _cursor.execute(SQL_PRICE)
     _conn.commit()
 
     _conn.close()

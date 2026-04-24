@@ -2,14 +2,12 @@ name: Daily Scrape
 
 on:
   push:
-      branches:
-        - main
-        - live
-      paths-ignore:
+    branches: [main, live]
+    paths-ignore:
       - 'data/**'
   schedule:
-    - cron: "0 6 * * *"  # runs daily at 06:00 UTC
-  workflow_dispatch:     # allows manual trigger
+    - cron: "17 6 * * *"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -71,8 +69,3 @@ jobs:
             git commit -m "Update scraped data $(date -u +'%Y-%m-%d')"
             git push origin live
           fi
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./data
