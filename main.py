@@ -4,9 +4,6 @@ import urllib.parse
 from typing import List, Tuple
 
 import database
-import finanztip
-import idealo
-import tagesschau
 
 
 def check_update_priority(_row: Tuple):
@@ -29,6 +26,8 @@ def check_update_priority(_row: Tuple):
 
 
 if __name__ == '__main__':
+    database.run_modules()
+
     _conn = sqlite3.connect(database.DATABASE)
     _cursor = _conn.cursor()
     _cursor.execute('SELECT * FROM task WHERE active=1;')
@@ -45,10 +44,10 @@ if __name__ == '__main__':
         _url_parsed = urllib.parse.urlparse(_url)
 
         if _url_parsed.netloc == 'www.idealo.de':
-            idealo.idealo(_url)
+            database.MODULES['www.idealo.de'](_url)
 
         if _url == 'https://www.finanztip.de/daily/':
-            finanztip.finanztip()
+            database.MODULES['https://www.finanztip.de/daily/']()
 
         if _url == 'https://www.tagesschau.de/':
-            tagesschau.tagesschau()
+            database.MODULES['https://www.tagesschau.de/']()

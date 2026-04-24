@@ -10,9 +10,6 @@ import utils
 
 
 def idealo_get(_url: str):
-    assert _url.startswith('https://www.idealo.de/')
-    assert _url.endswith('.html')
-
     # 1) Create session
     _session = requests.Session()
 
@@ -119,14 +116,17 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
     _conn.commit()
 
     # 3) Create or update product
-    try:
+    _cursor.execute('SELECT base_price FROM product WHERE url=?;', (_data['link'],))
+    _product_price: int = int((_cursor.fetchone() or (0,))[0])
+
+    if not _product_price:
         _cursor.execute(
-            "INSERT INTO products (title, url, currency, base_price, last_price, last_update, active) VALUES (?, ?, 'EUR', ?, ?, ?, 1);",
+            "INSERT INTO product (title, url, currency, base_price, last_price, last_update, active) VALUES (?, ?, 'EUR', ?, ?, ?, 1);",
             (_data['title'], _data['link'], _data_price, _data_price, _pubDate)
         )
-    except Exception:
+    else:
         _cursor.execute(
-            "UPDATE products SET currency='EUR', active=1, last_price=?, last_update=? WHERE url=?;",
+            "UPDATE product SET currency='EUR', active=1, last_price=?, last_update=? WHERE url=?;",
             (_data_price, _pubDate, _data['link'])
         )
     _conn.commit()
@@ -139,6 +139,18 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
         (_data['title'], _task, _data['link'], _pubDate, _data_price, _data_offers, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
     )
     _conn.commit()
+
+    # 5) Check if product price changes too much
+    if ((_data_price - _product_price)/_product_price) <= -0.05:
+        _cursor.execute(
+            "UPDATE product SET base_price=last_price WHERE url=?;",
+            (_data['link'],)
+        )
+        _cursor.execute(
+            "UPDATE task SET priority=25 WHERE url=?;",
+            (_data['link'],)
+        )
+        _conn.commit()
 
     _conn.close()
 

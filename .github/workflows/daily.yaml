@@ -1,0 +1,71 @@
+name: Daily Scrape
+
+on:
+  push:
+    branches: [main, live]
+    paths-ignore:
+      - 'data/**'
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: live
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt || true
+
+      - name: Initialize database
+        run: bash database.sh --init
+
+      - name: Clean data directory
+        run: rm -rf data/* && touch data/.gitkeep
+
+      - name: Run scraper
+        run: python main.py
+
+      - name: Export database
+        run: bash database.sh
+
+      - name: Commit and push data directory
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          LAST_AUTHOR_NAME="$(git log -1 --pretty=%an || true)"
+          LAST_AUTHOR_EMAIL="$(git log -1 --pretty=%ae || true)"
+          LAST_SUBJECT="$(git log -1 --pretty=%s || true)"
+
+          if [ "$LAST_AUTHOR_NAME" = "github-actions" ] && \
+             [ "$LAST_AUTHOR_EMAIL" = "github-actions@github.com" ] && \
+             [[ "$LAST_SUBJECT" == Update\ scraped\ data* ]]; then
+            echo "Last commit is an Actions scrape commit; amending it."
+            git commit --amend -m "Update scraped data $(date -u +'%Y-%m-%d')"
+            git push --force-with-lease origin live
+          else
+            echo "Last commit is not an Actions scrape commit; creating a new commit."
+            git commit -m "Update scraped data $(date -u +'%Y-%m-%d')"
+            git push origin live
+          fi
