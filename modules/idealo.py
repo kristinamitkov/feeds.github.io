@@ -141,7 +141,7 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
     _conn.commit()
 
     # 5) Check if product price changes too much
-    if ((_data_price - _product_price)/_product_price) <= -0.05:
+    if bool(_product_price) and (((_data_price - _product_price)/_product_price) <= -0.05):
         _cursor.execute(
             "UPDATE product SET base_price=last_price WHERE url=?;",
             (_data['link'],)
