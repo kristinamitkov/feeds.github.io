@@ -1,6 +1,5 @@
 import hashlib
 import re
-import sqlite3
 from typing import Any, Dict, List
 
 import bs4
@@ -176,22 +175,7 @@ def finanztip_store(_response: requests.Response, _data: Dict[str, Any], _xml: b
         _file.write(_xml)
 
     # 3) Save data locally in DB
-    _conn = sqlite3.connect(database.DATABASE)
-    _cursor = _conn.cursor()
-
-    try:
-        _cursor.execute(
-            "INSERT INTO task (title, url, active, last_update, last_status_code, last_status_text, last_error) VALUES (?, ?, 1, ?, ?, ?, ?);",
-            (_data['title'], 'https://www.finanztip.de/daily/', _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
-        )
-    except Exception:
-        _cursor.execute(
-            "UPDATE task SET title=COALESCE(title, ?), last_update=?, last_status_code=?, last_status_text=?, last_error=?, active=1, priority=(priority+1) WHERE url=?;",
-            (_data['title'], _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)), 'https://www.finanztip.de/daily/')
-        )
-    _conn.commit()
-
-    _conn.close()
+    database.add_task(_data['title'], 'https://www.finanztip.de/daily/', _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
 
 def finanztip():
     _response = finanztip_get()

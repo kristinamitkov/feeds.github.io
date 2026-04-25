@@ -102,16 +102,80 @@ def prune_prices():
     _conn.commit()
     _conn.close()
 
-def add_task(_title: Optional[str], _url: str):
-    print('Adding task to DB', _title, _url)
-
+def add_task(_title: Optional[str], _url: str, _last_update: Optional[float], _last_status_code: Optional[int], _last_status_text: Optional[str], _last_error: Optional[str]) -> int:
     _conn = sqlite3.connect(DATABASE)
     _cursor = _conn.cursor()
 
     try:
-        _cursor.execute("INSERT INTO task (title, url, active) VALUES (?, ?, 1);", (_title, _url))
+        _cursor.execute(
+            "INSERT INTO task (title, url, last_update, last_status_code, last_status_text, last_error) VALUES (?, ?, ?, ?, ?, ?) RETURNING id;",
+            (_title, _url, _last_update, _last_status_code, _last_status_text, _last_error)
+        )
     except Exception as e:
-        _cursor.execute("UPDATE task SET title=COALESCE(title, ?), active=1 WHERE url=?;", (_title, _url))
+        _cursor.execute(
+            "UPDATE task SET title=COALESCE(title, ?), last_update=?, last_status_code=?, last_status_text=?, last_error=?, active=1, priority=(priority+1) WHERE url=? RETURNING id;",
+            (_title, _last_update, _last_status_code, _last_status_text, _last_error, _url)
+        )
+
+    _task: int = _cursor.fetchone()[0]
+
+    _conn.commit()
+    _conn.close()
+
+    return _task
+
+def add_product(_title: str, _url: str, _currency: str, _base_price: int, _last_price: int, _last_update: float) -> str:
+    _conn = sqlite3.connect(DATABASE)
+    _cursor = _conn.cursor()
+
+    try:
+        _cursor.execute(
+            "INSERT INTO product (title, url, currency, base_price, last_price, last_update) VALUES (?, ?, ?, ?, ?, ?);",
+            (_title, _url, _currency, _base_price, _last_price, _last_update)
+        )
+    except Exception as e:
+        _cursor.execute(
+            "UPDATE product SET active=1, last_price=?, last_update=? WHERE url=?;",
+            (_last_price, _last_update, _url)
+        )
+
+    _conn.commit()
+
+    if bool(_base_price) and (((_last_update - _base_price)/_base_price) > -0.05):
+        _conn.close()
+        return _title
+
+    _cursor.execute("UPDATE product SET base_price=last_price WHERE url=?;", (_url,))
+    _cursor.execute("UPDATE task SET priority=25 WHERE url=?;", (_url,))
+
+    return _title
+
+def add_price(_title: str, _task: int, _url: str, _created: float, _price: int, _currency: str, _offers: int, _status_code: int, _status_text: str, _error: Optional[str]):
+    _conn = sqlite3.connect(DATABASE)
+    _cursor = _conn.cursor()
+
+    _cursor.execute(
+        """INSERT INTO price (product_id, task_id, url, created, price, currency, offers, status_code, status_text, error)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        """,
+        (_title, _task, _url, _created, _price, _currency, _offers, _status_code, _status_text, _error)
+    )
+    _cursor.execute(
+        "UPDATE product SET active=1, last_price=?, last_update=? WHERE url=?;",
+        (_price, _created, _url)
+    )
+
+    _conn.commit()
+
+    _cursor.execute("SELECT base_price FROM product WHERE url=?", (_url,))
+    _base_price: int = _cursor.fetchone()[0]
+
+    if bool(_base_price) and (((_price - _base_price)/_base_price) > -0.05):
+        _conn.close()
+        return
+
+    _cursor.execute("UPDATE product SET base_price=last_price WHERE url=?;", (_url,))
+    _cursor.execute("UPDATE task SET priority=25 WHERE url=?;", (_url,))
 
     _conn.commit()
     _conn.close()
@@ -145,11 +209,12 @@ def export_prices(_url: str, _export: str):
     _cursor = _conn.cursor()
 
     _cursor.execute('SELECT * FROM price WHERE url=? ORDER BY created ASC;', (_url,))
-    _prices: List[str] = [','.join((str(__entry) if __entry is not None else '') for __entry in _entry[1:]) for _entry in _cursor.fetchall()]
+    _prices: List[str] = [','.join((str(__entry) if __entry is not None else '') for __entry in _entry[1:]) for _entry in _cursor.fetchall() if _entry]
 
     with open(_export, mode='w') as _file:
         _file.write('product_id,task_id,url,created,price,currency,offers,status_code,status_text,error\n')
-        _file.write('\n'.join(_prices))
+        _file.write(''.join(_prices))
+        _file.write('\n')
 
     _conn.commit()
     _conn.close()
@@ -178,4 +243,4 @@ if __name__ == '__main__':
         export_prices(_args['url'], _args['export'])
     elif _args['url']:
         assert(_args['url'].startswith('http://') or _args['url'].startswith('https://'))
-        add_task(_args['title'] if _args['title'] else None, _args['url'])
+        add_task(_args['title'] if _args['title'] else None, _args['url'], None, None, None, None)

@@ -1,5 +1,4 @@
 import re
-import sqlite3
 import urllib.parse
 from typing import Any, Dict
 
@@ -82,9 +81,6 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
     _data_offers = int(re.search(r'[0-9]+', _data['offers']).group())
     _data_price = int(re.search(r'[0-9]+', _data['prices']).group())
 
-    _conn = sqlite3.connect(database.DATABASE)
-    _cursor = _conn.cursor()
-
     _pubDate = _idealo_date(_data['pubDate'])
 
     # 1) Save data
@@ -102,57 +98,13 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
         _file.write(_response.content)
 
     # 2) Get or create task
-    try:
-        _cursor.execute(
-            "INSERT INTO task (title, url, active, last_update, last_status_code, last_status_text, last_error) VALUES (?, ?, 1, ?, ?, ?, ?) RETURNING id;",
-            (_data['title'], _data['link'], _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
-        )
-    except Exception as e:
-        _cursor.execute(
-            "UPDATE task SET title=COALESCE(title, ?), last_update = ?, last_status_code=?, last_status_text=?, last_error=?, active=1, priority=(priority + 1) WHERE url = ? RETURNING id;",
-            (_data['title'], _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)), _data['link'])
-        )
-    _task = _cursor.fetchone()[0]
-    _conn.commit()
+    _task = database.add_task(_data['title'], _data['link'], _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
 
     # 3) Create or update product
-    _cursor.execute('SELECT base_price FROM product WHERE url=?;', (_data['link'],))
-    _product_price: int = int((_cursor.fetchone() or (0,))[0])
-
-    if not _product_price:
-        _cursor.execute(
-            "INSERT INTO product (title, url, currency, base_price, last_price, last_update, active) VALUES (?, ?, 'EUR', ?, ?, ?, 1);",
-            (_data['title'], _data['link'], _data_price, _data_price, _pubDate)
-        )
-    else:
-        _cursor.execute(
-            "UPDATE product SET currency='EUR', active=1, last_price=?, last_update=? WHERE url=?;",
-            (_data_price, _pubDate, _data['link'])
-        )
-    _conn.commit()
+    database.add_product(_data['title'], _data['link'], 'EUR', _data_price, _data_price, _pubDate)
 
     # 4) Add price point
-    _cursor.execute(
-        """INSERT INTO price (product_id, task_id, url, created, price, currency, offers, status_code, status_text, error)
-            VALUES (?, ?, ?, ?, ?, 'EUR', ?, ?, ?, ?);
-        """,
-        (_data['title'], _task, _data['link'], _pubDate, _data_price, _data_offers, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
-    )
-    _conn.commit()
-
-    # 5) Check if product price changes too much
-    if bool(_product_price) and (((_data_price - _product_price)/_product_price) <= -0.05):
-        _cursor.execute(
-            "UPDATE product SET base_price=last_price WHERE url=?;",
-            (_data['link'],)
-        )
-        _cursor.execute(
-            "UPDATE task SET priority=25 WHERE url=?;",
-            (_data['link'],)
-        )
-        _conn.commit()
-
-    _conn.close()
+    database.add_price(_data['title'], _task, _data['link'], _pubDate, _data_price, 'EUR', _data_offers, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
 
 def idealo(_url: str):
     _response = idealo_get(_url)

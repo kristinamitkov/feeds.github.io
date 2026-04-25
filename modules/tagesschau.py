@@ -1,5 +1,4 @@
 import re
-import sqlite3
 import xml.etree.ElementTree
 
 import database
@@ -44,20 +43,4 @@ def tagesschau():
     _path_1 = 'data/' + _path_1 + utils.parse_timestamp(_pubDate, '%Y%m%d') + '.rss'
 
     # 7) Save data locally in DB
-    _conn = sqlite3.connect(database.DATABASE)
-    _cursor = _conn.cursor()
-
-    # 8) Create or update task
-    try:
-        _cursor.execute(
-            "INSERT INTO task (title, url, active, last_update, last_status_code, last_status_text, last_error) VALUES (?, ?, 1, ?, ?, ?, ?);",
-            ('Tagesschau', 'https://www.tagesschau.de/', _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
-        )
-    except Exception:
-        _cursor.execute(
-            "UPDATE task SET title=COALESCE(title, ?), last_update=?, last_status_code=?, last_status_text=?, last_error=?, active=1, priority=(priority+1) WHERE url=?;",
-            ('Tagesschau', _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)), 'https://www.tagesschau.de/')
-        )
-
-    _conn.commit()
-    _conn.close()
+    database.add_task('Tagesschau', 'https://www.tagesschau.de/', _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
