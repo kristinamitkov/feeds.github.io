@@ -31,7 +31,7 @@ if [[ "$INIT" = false && "$EXPORT" = false ]]; then
 fi
 
 while IFS=',' read -r arg1 arg2 arg3; do
-    echo "Processing $arg1
+    echo "Processing $arg1"
 
     if [ "$INIT" = true ]; then
         python database.py --title "$arg1" --url "$arg2"
