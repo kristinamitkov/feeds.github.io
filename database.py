@@ -16,7 +16,6 @@ def run_modules():
     MODULES["https://www.finanztip.de/daily/"] = finanztip
     MODULES["https://www.tagesschau.de/"] = tagesschau
 
-# TODO: minutes DEFAULT 360?
 SQL_TASK = """CREATE TABLE IF NOT EXISTS task (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT DEFAULT NULL,
@@ -124,20 +123,22 @@ def add_task(_title: Optional[str], _url: str, _last_update: Optional[float], _l
 
     return _task
 
-def add_product(_title: str, _url: str, _currency: str, _base_price: int, _last_price: int, _last_update: float) -> str:
+def add_product(_title: str, _url: str, _currency: str, _last_price: int, _last_update: float) -> str:
     _conn = sqlite3.connect(DATABASE)
     _cursor = _conn.cursor()
 
     try:
         _cursor.execute(
-            "INSERT INTO product (title, url, currency, base_price, last_price, last_update) VALUES (?, ?, ?, ?, ?, ?);",
-            (_title, _url, _currency, _base_price, _last_price, _last_update)
+            "INSERT INTO product (title, url, currency, base_price, last_price, last_update) VALUES (?, ?, ?, ?, ?, ?) RETURNING base_price;",
+            (_title, _url, _currency, _last_price, _last_price, _last_update)
         )
     except Exception as e:
         _cursor.execute(
-            "UPDATE product SET active=1, last_price=?, last_update=? WHERE url=?;",
+            "UPDATE product SET active=1, last_price=?, last_update=? WHERE url=? RETURNING base_price;",
             (_last_price, _last_update, _url)
         )
+
+    _base_price: int = _cursor.fetchone()[0]
 
     _conn.commit()
 
@@ -151,6 +152,8 @@ def add_product(_title: str, _url: str, _currency: str, _base_price: int, _last_
     return _title
 
 def add_price(_title: str, _task: int, _url: str, _created: float, _price: int, _currency: str, _offers: int, _status_code: int, _status_text: str, _error: Optional[str]):
+    add_product(_title, _url, _currency, _price, _created)
+
     _conn = sqlite3.connect(DATABASE)
     _cursor = _conn.cursor()
 
@@ -160,22 +163,6 @@ def add_price(_title: str, _task: int, _url: str, _created: float, _price: int, 
         """,
         (_title, _task, _url, _created, _price, _currency, _offers, _status_code, _status_text, _error)
     )
-    _cursor.execute(
-        "UPDATE product SET active=1, last_price=?, last_update=? WHERE url=?;",
-        (_price, _created, _url)
-    )
-
-    _conn.commit()
-
-    _cursor.execute("SELECT base_price FROM product WHERE url=?", (_url,))
-    _base_price: int = _cursor.fetchone()[0]
-
-    if bool(_base_price) and (((_price - _base_price)/_base_price) > -0.05):
-        _conn.close()
-        return
-
-    _cursor.execute("UPDATE product SET base_price=last_price WHERE url=?;", (_url,))
-    _cursor.execute("UPDATE task SET priority=25 WHERE url=?;", (_url,))
 
     _conn.commit()
     _conn.close()
@@ -189,18 +176,9 @@ def import_prices(_import: str):
     except Exception as e:
         return
 
-    _conn = sqlite3.connect(DATABASE)
-    _cursor = _conn.cursor()
-
     for _price in _prices:
-        _cursor.execute(
-            """INSERT INTO price (product_id, task_id, url, created, price, currency, offers, status_code, status_text, error)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-            (tuple(_entry if _entry else None for _entry in _price))
-        )
-
-    _conn.commit()
-    _conn.close()
+        _price: Tuple = tuple((_entry if _entry else None) for _entry in _price[1:])
+        add_price(*_price)
 
 def export_prices(_url: str, _export: str):
     print('Exporting DB', _url, _export)

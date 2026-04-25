@@ -39,7 +39,7 @@ jobs:
         run: python main.py
 
       - name: Export database
-        run: bash database.sh
+        run: bash database.sh --exoprt
 
       - name: Commit and push data directory
         run: |

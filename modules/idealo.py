@@ -101,7 +101,7 @@ def idealo_store(_response: requests.Response, _data: Dict[str, Any]):
     _task = database.add_task(_data['title'], _data['link'], _pubDate, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
 
     # 3) Create or update product
-    database.add_product(_data['title'], _data['link'], 'EUR', _data_price, _data_price, _pubDate)
+    database.add_product(_data['title'], _data['link'], 'EUR', _data_price, _pubDate)
 
     # 4) Add price point
     database.add_price(_data['title'], _task, _data['link'], _pubDate, _data_price, 'EUR', _data_offers, _response.status_code, _response.reason, (None if _response.ok else (_response.text or _response.reason)))
