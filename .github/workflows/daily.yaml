@@ -35,14 +35,11 @@ jobs:
       - name: Initialize database
         run: bash database.sh --init
 
-      - name: Clean data directory
-        run: rm -rf data/* && touch data/.gitkeep
-
       - name: Run scraper
         run: python main.py
 
       - name: Export database
-        run: bash database.sh
+        run: bash database.sh --exoprt
 
       - name: Commit and push data directory
         run: |
