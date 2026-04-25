@@ -6,8 +6,8 @@
     <description>Die aktuellen Beiträge der Seite https://www.tagesschau.de/</description>
     <language>de</language>
     <copyright>ARD-aktuell / tagesschau.de</copyright>
-    <lastBuildDate>Sat, 25 Apr 2026 14:22:36 +0200</lastBuildDate>
-    <pubDate>Sat, 25 Apr 2026 14:22:36 +0200</pubDate>
+    <lastBuildDate>Sat, 25 Apr 2026 14:49:19 +0200</lastBuildDate>
+    <pubDate>Sat, 25 Apr 2026 14:49:19 +0200</pubDate>
     <docs>http://blogs.law.harvard.edu/tech/rss</docs>
     <ttl>90</ttl>
     <dc:publisher>tagesschau.de</dc:publisher>
@@ -52,24 +52,6 @@
       <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/video/video-1578962.html"><img src="https://images.tagesschau.de/image/f481def0-7ff5-435e-a07c-b344ac016cf2/AAABncO7CZ8/AAABnSSvrFg/16x9-big/sendungsbild-1723658.jpg?width=1920" alt="Sendungsbild | ARD-aktuell" /></a> <br/> <br/>Kommunalwahlen im Palästinensergebiet: Tom Khaled Würdemann, Hochschule für Jüdische Studien Heidelberg[<a href="https://www.tagesschau.de/video/video-1578962.html">mehr</a>]</p>]]></content:encoded>
     </item>
     <item>
-      <title>Nach Entscheidung für Tankrabatt</title>
-      <link>https://www.tagesschau.de/video/video-1578942.html</link>
-      <description>Nach Entscheidung für Tankrabatt</description>
-      <pubDate>Sat, 25 Apr 2026 09:28:57 +0200</pubDate>
-      <guid>843d1652-e565-45b1-826a-0b1fe0981486</guid>
-      <dc:date>2026-04-25T07:28:57Z</dc:date>
-      <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/video/video-1578942.html"><img src="https://images.tagesschau.de/image/b0601efa-c613-4441-90ce-4d67b86ccfae/AAABncOKmY4/AAABnSSvrFg/16x9-big/sendungsbild-1723632.jpg?width=1920" alt="Sendungsbild | ARD-aktuell" /></a> <br/> <br/>Nach Entscheidung für Tankrabatt[<a href="https://www.tagesschau.de/video/video-1578942.html">mehr</a>]</p>]]></content:encoded>
-    </item>
-    <item>
-      <title>Brüchige Waffenruhe zwischen Israel und Libanon</title>
-      <link>https://www.tagesschau.de/video/video-1578946.html</link>
-      <description>Brüchige Waffenruhe zwischen Israel und Libanon</description>
-      <pubDate>Sat, 25 Apr 2026 09:31:56 +0200</pubDate>
-      <guid>a39112ba-a873-4651-8301-2e18d958a5b6</guid>
-      <dc:date>2026-04-25T07:31:56Z</dc:date>
-      <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/video/video-1578946.html"><img src="https://images.tagesschau.de/image/e05aba6c-a457-4a03-8c7f-ea0c020d5d1d/AAABncONVCc/AAABnSSvrFg/16x9-big/sendungsbild-1723634.jpg?width=1920" alt="Sendungsbild | ARD-aktuell" /></a> <br/> <br/>Brüchige Waffenruhe zwischen Israel und Libanon[<a href="https://www.tagesschau.de/video/video-1578946.html">mehr</a>]</p>]]></content:encoded>
-    </item>
-    <item>
       <title>Automesse in China. Deutsche Hersteller wollen bei E-Autos aufholen</title>
       <link>https://www.tagesschau.de/video/video-1578948.html</link>
       <description>Automesse in China. Deutsche Hersteller wollen bei E-Autos aufholen</description>
@@ -86,6 +68,24 @@
       <guid>1f6372ea-1634-4c17-8986-c1687d41ffca</guid>
       <dc:date>2026-04-25T07:38:45Z</dc:date>
       <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/video/video-1578950.html"><img src="https://images.tagesschau.de/image/55501f61-d8f0-4ff1-b2e5-41a6dd27adfb/AAABncOTlD0/AAABnSSvrFg/16x9-big/sendungsbild-1723638.jpg?width=1920" alt="Sendungsbild | ARD-aktuell" /></a> <br/> <br/>Route 66 in den USA feiert 100-jähriges Jubiläum[<a href="https://www.tagesschau.de/video/video-1578950.html">mehr</a>]</p>]]></content:encoded>
+    </item>
+    <item>
+      <title>Nach Entscheidung für Tankrabatt</title>
+      <link>https://www.tagesschau.de/video/video-1578942.html</link>
+      <description>Nach Entscheidung für Tankrabatt</description>
+      <pubDate>Sat, 25 Apr 2026 09:28:57 +0200</pubDate>
+      <guid>843d1652-e565-45b1-826a-0b1fe0981486</guid>
+      <dc:date>2026-04-25T07:28:57Z</dc:date>
+      <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/video/video-1578942.html"><img src="https://images.tagesschau.de/image/b0601efa-c613-4441-90ce-4d67b86ccfae/AAABncOKmY4/AAABnSSvrFg/16x9-big/sendungsbild-1723632.jpg?width=1920" alt="Sendungsbild | ARD-aktuell" /></a> <br/> <br/>Nach Entscheidung für Tankrabatt[<a href="https://www.tagesschau.de/video/video-1578942.html">mehr</a>]</p>]]></content:encoded>
+    </item>
+    <item>
+      <title>Brüchige Waffenruhe zwischen Israel und Libanon</title>
+      <link>https://www.tagesschau.de/video/video-1578946.html</link>
+      <description>Brüchige Waffenruhe zwischen Israel und Libanon</description>
+      <pubDate>Sat, 25 Apr 2026 09:31:56 +0200</pubDate>
+      <guid>a39112ba-a873-4651-8301-2e18d958a5b6</guid>
+      <dc:date>2026-04-25T07:31:56Z</dc:date>
+      <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/video/video-1578946.html"><img src="https://images.tagesschau.de/image/e05aba6c-a457-4a03-8c7f-ea0c020d5d1d/AAABncONVCc/AAABnSSvrFg/16x9-big/sendungsbild-1723634.jpg?width=1920" alt="Sendungsbild | ARD-aktuell" /></a> <br/> <br/>Brüchige Waffenruhe zwischen Israel und Libanon[<a href="https://www.tagesschau.de/video/video-1578946.html">mehr</a>]</p>]]></content:encoded>
     </item>
     <item>
       <title>Phishing auf Signal: Bundesregierung von Angriff betroffen</title>
@@ -322,6 +322,15 @@
       <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/multimedia/bilder/blickpunkte-10158.html"><img src="https://images.tagesschau.de/image/7d86f1cf-a85f-4803-bc2a-25f882333e7b/AAABncOpQVQ/AAABnSSvrFg/16x9-big/anzac-tag-australien-100.jpg?width=1920" alt="Eine Gruppe von Menschen steht vor einem rot angestrahlten Gebäude vor Nachthimmel. | AFP" /></a> <br/> <br/>[<a href="https://www.tagesschau.de/multimedia/bilder/blickpunkte-10158.html">mehr</a>]</p>]]></content:encoded>
     </item>
     <item>
+      <title>Papst fordert Abschaffung der Todesstrafe - USA verschärfen sie</title>
+      <link>https://www.tagesschau.de/ausland/europa/papst-todesstrafe-100.html</link>
+      <description>In einer Rede für eine US-Universität hat Leo XIV. die weltweite Abschaffung der Todesstrafe gefordert - sie sei nach der Lehre der Kirche unzulässig. Kurz zuvor hatte die US-Regierung angekündigt, die Todesstrafe auszuweiten.</description>
+      <pubDate>Sat, 25 Apr 2026 13:50:21 +0200</pubDate>
+      <guid>8073d0ae-5292-44a3-99e8-f22b9fd6d713</guid>
+      <dc:date>2026-04-25T11:50:21Z</dc:date>
+      <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/ausland/europa/papst-todesstrafe-100.html"><img src="https://images.tagesschau.de/image/b1c4807b-5d1b-41df-913d-3c9883735f73/AAABncR3Uys/AAABnSSvrFg/16x9-big/sendungsbild-1723748.jpg?width=1920" alt="Papst Leo XIV. in seiner Videobotschaft | ARD-aktuell" /></a> <br/> <br/>In einer Rede für eine US-Universität hat Leo XIV. die weltweite Abschaffung der Todesstrafe gefordert - sie sei nach der Lehre der Kirche unzulässig. Kurz zuvor hatte die US-Regierung angekündigt, die Todesstrafe auszuweiten.[<a href="https://www.tagesschau.de/ausland/europa/papst-todesstrafe-100.html">mehr</a>]</p>]]></content:encoded>
+    </item>
+    <item>
       <title>Geplünderte Rücklagen: Albtraum für Mieter und Wohnungseigentümer</title>
       <link>https://www.tagesschau.de/wirtschaft/verbraucher/hausverwaltung-immobilie-betrug-100.html</link>
       <description>Ein solches Szenario trifft Eigentümer und Mieter hart: Die Instandhaltungsrücklagen sind verschwunden, der Hausverwalter ist weg. Wie gut ist der rechtliche Schutz vor unseriösen Immobilienverwaltern? Von J. Thürmer und M. Schuster.</description>
@@ -329,15 +338,6 @@
       <guid>be014052-64fd-4d53-89dc-abcaa456af49</guid>
       <dc:date>2026-04-25T09:47:43Z</dc:date>
       <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/wirtschaft/verbraucher/hausverwaltung-immobilie-betrug-100.html"><img src="https://images.tagesschau.de/image/e0b4d86a-6637-4f3c-9c00-3e3611a8e39c/AAABnanpCiI/AAABnSSvrFg/16x9-big/wohnimmobilien-100.jpg?width=1920" alt="Wohnimmobilie | picture alliance / Hauke-Christi" /></a> <br/> <br/>Ein solches Szenario trifft Eigentümer und Mieter hart: Die Instandhaltungsrücklagen sind verschwunden, der Hausverwalter ist weg. Wie gut ist der rechtliche Schutz vor unseriösen Immobilienverwaltern? <em>Von J. Thürmer und M. Schuster.</em>[<a href="https://www.tagesschau.de/wirtschaft/verbraucher/hausverwaltung-immobilie-betrug-100.html">mehr</a>]</p>]]></content:encoded>
-    </item>
-    <item>
-      <title>Hinrichtungen auf Bundesebene: USA erlauben künftig Erschießungen</title>
-      <link>https://www.tagesschau.de/ausland/amerika/todesstrafe-usa-erschiessung-100.html</link>
-      <description>Wer in den USA auf Bundesebene zum Tod verurteilt ist, kann künftig auch vor ein Erschießungskommando kommen. Das kündigte Justizminister Blanche an. Zudem sollen Todesstrafen schneller vollstreckt werden.</description>
-      <pubDate>Fri, 24 Apr 2026 21:04:50 +0200</pubDate>
-      <guid>dcdf184b-2495-47cf-b5f4-8e7f489720df</guid>
-      <dc:date>2026-04-24T19:04:50Z</dc:date>
-      <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/ausland/amerika/todesstrafe-usa-erschiessung-100.html"><img src="https://images.tagesschau.de/image/929174b7-e536-42e8-8597-ba5c3a083e54/AAABle-f258/AAABnSSvrFg/16x9-big/todesstrafe-usa-101.jpg?width=1920" alt="Die Todeszelle des berüchtigten Huntsville-Gefängnisses. | dpa" /></a> <br/> <br/>Wer in den USA auf Bundesebene zum Tod verurteilt ist, kann künftig auch vor ein Erschießungskommando kommen. Das kündigte Justizminister Blanche an. Zudem sollen Todesstrafen schneller vollstreckt werden.[<a href="https://www.tagesschau.de/ausland/amerika/todesstrafe-usa-erschiessung-100.html">mehr</a>]</p>]]></content:encoded>
     </item>
     <item>
       <title>Phishing auf Signal: Bundesregierung von Angriff betroffen</title>
@@ -349,22 +349,13 @@
       <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/inland/signal-ausspaehung-bundesregierung-100.html"><img src="https://images.tagesschau.de/image/7207d93d-39cf-4039-bcad-0ec552be656f/AAABmKlDroM/AAABnSSvrFg/16x9-big/regierungsbank-114.jpg?width=1920" alt="Die Minister der Bundesregierung sitzen auf der Regierungsbank im Bundestag. | dpa" /></a> <br/> <br/>Der Phishing-Angriff auf Nutzer des Messengerdienstes Signal ist offenbar größer als bislang bekannt. Laut Recherchen des Spiegel sollen auch Bundesministerinnen von der mutmaßlichen Spionage betroffen sein.[<a href="https://www.tagesschau.de/inland/signal-ausspaehung-bundesregierung-100.html">mehr</a>]</p>]]></content:encoded>
     </item>
     <item>
-      <title>Papst fordert Abschaffung der Todesstrafe - USA verschärfen sie</title>
-      <link>https://www.tagesschau.de/ausland/europa/papst-todesstrafe-100.html</link>
-      <description>In einer Rede für eine US-Universität hat Leo XIV. die weltweite Abschaffung der Todesstrafe gefordert - sie sei nach der Lehre der Kirche unzulässig. Kurz zuvor hatte die US-Regierung angekündigt, die Todesstrafe auszuweiten.</description>
-      <pubDate>Sat, 25 Apr 2026 13:50:21 +0200</pubDate>
-      <guid>8073d0ae-5292-44a3-99e8-f22b9fd6d713</guid>
-      <dc:date>2026-04-25T11:50:21Z</dc:date>
-      <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/ausland/europa/papst-todesstrafe-100.html"><img src="https://images.tagesschau.de/image/b1c4807b-5d1b-41df-913d-3c9883735f73/AAABncR3Uys/AAABnSSvrFg/16x9-big/sendungsbild-1723748.jpg?width=1920" alt="Papst Leo XIV. in seiner Videobotschaft | ARD-aktuell" /></a> <br/> <br/>In einer Rede für eine US-Universität hat Leo XIV. die weltweite Abschaffung der Todesstrafe gefordert - sie sei nach der Lehre der Kirche unzulässig. Kurz zuvor hatte die US-Regierung angekündigt, die Todesstrafe auszuweiten.[<a href="https://www.tagesschau.de/ausland/europa/papst-todesstrafe-100.html">mehr</a>]</p>]]></content:encoded>
-    </item>
-    <item>
-      <title>Slowakei: Proteste gegen Entlassungen und Zensur in Kultur und Medien</title>
-      <link>https://www.tagesschau.de/ausland/europa/slowakei-zensur-100.html</link>
-      <description>Künstler verlieren ihre Engagements, Journalisten werden entlassen, das Fernsehen zeigt verstärkt Heimat-Folklore - und Sendungen mit Premier Fico. Viele im EU-Land Slowakei werten das als klare Zensur und protestieren. Von M. Allweiss.</description>
-      <pubDate>Sat, 25 Apr 2026 11:38:52 +0200</pubDate>
-      <guid>e5de786a-fb4c-414a-a253-696c1b642ee4</guid>
-      <dc:date>2026-04-25T09:38:52Z</dc:date>
-      <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/ausland/europa/slowakei-zensur-100.html"><img src="https://images.tagesschau.de/image/baa68d5b-ebb0-43c1-aa2a-41312e825604/AAABncOixsw/AAABnSSvrFg/16x9-big/slowakei-proteste-kultur-100.jpg?width=1920" alt="Menschen demonstrieren gegen die Kulturpolitik der slowakischen Regierung. | Pavel Neubauer/TASR/dpa" /></a> <br/> <br/>Künstler verlieren ihre Engagements, Journalisten werden entlassen, das Fernsehen zeigt verstärkt Heimat-Folklore - und Sendungen mit Premier Fico. Viele im EU-Land Slowakei werten das als klare Zensur und protestieren. <em>Von M. Allweiss.</em>[<a href="https://www.tagesschau.de/ausland/europa/slowakei-zensur-100.html">mehr</a>]</p>]]></content:encoded>
+      <title>Hinrichtungen auf Bundesebene: USA erlauben künftig Erschießungen</title>
+      <link>https://www.tagesschau.de/ausland/amerika/todesstrafe-usa-erschiessung-100.html</link>
+      <description>Wer in den USA auf Bundesebene zum Tod verurteilt ist, kann künftig auch vor ein Erschießungskommando kommen. Das kündigte Justizminister Blanche an. Zudem sollen Todesstrafen schneller vollstreckt werden.</description>
+      <pubDate>Fri, 24 Apr 2026 21:04:50 +0200</pubDate>
+      <guid>dcdf184b-2495-47cf-b5f4-8e7f489720df</guid>
+      <dc:date>2026-04-24T19:04:50Z</dc:date>
+      <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/ausland/amerika/todesstrafe-usa-erschiessung-100.html"><img src="https://images.tagesschau.de/image/929174b7-e536-42e8-8597-ba5c3a083e54/AAABle-f258/AAABnSSvrFg/16x9-big/todesstrafe-usa-101.jpg?width=1920" alt="Die Todeszelle des berüchtigten Huntsville-Gefängnisses. | dpa" /></a> <br/> <br/>Wer in den USA auf Bundesebene zum Tod verurteilt ist, kann künftig auch vor ein Erschießungskommando kommen. Das kündigte Justizminister Blanche an. Zudem sollen Todesstrafen schneller vollstreckt werden.[<a href="https://www.tagesschau.de/ausland/amerika/todesstrafe-usa-erschiessung-100.html">mehr</a>]</p>]]></content:encoded>
     </item>
     <item>
       <title>Gesundheitsreform: Wie Lobbygruppen versuchen, Einfluss zu nehmen</title>
@@ -383,6 +374,15 @@
       <guid>79c1b667-65ed-400c-b257-9c3770801a8d</guid>
       <dc:date>2026-04-24T09:30:38Z</dc:date>
       <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/investigativ/wdr/agenten-spionage-ukraine-russland-lettland-100.html"><img src="https://images.tagesschau.de/image/cbc05244-5b65-4c55-955f-d098b46d6d50/AAABnbvvivQ/AAABnSSvrFg/16x9-big/bayern-verkehrskontrolle-100.jpg?width=1920" alt="Kontrolle von nach Deutschland einreisenden Personen und Autos durch die bayerische Grenzpolizei  | dpa" /></a> <br/> <br/>In Bayern wurden zwei Männer bei einer Verkehrskontrolle auf der Autobahn 6 gestoppt. Inzwischen beschäftigt der Fall die Sicherheitsbehörden: Wurden russische Agenten auf der Autobahn gefasst? <em>Von Florian Flade.</em>[<a href="https://www.tagesschau.de/investigativ/wdr/agenten-spionage-ukraine-russland-lettland-100.html">mehr</a>]</p>]]></content:encoded>
+    </item>
+    <item>
+      <title>Slowakei: Proteste gegen Entlassungen und Zensur in Kultur und Medien</title>
+      <link>https://www.tagesschau.de/ausland/europa/slowakei-zensur-100.html</link>
+      <description>Künstler verlieren ihre Engagements, Journalisten werden entlassen, das Fernsehen zeigt verstärkt Heimat-Folklore - und Sendungen mit Premier Fico. Viele im EU-Land Slowakei werten das als klare Zensur und protestieren. Von M. Allweiss.</description>
+      <pubDate>Sat, 25 Apr 2026 11:38:52 +0200</pubDate>
+      <guid>e5de786a-fb4c-414a-a253-696c1b642ee4</guid>
+      <dc:date>2026-04-25T09:38:52Z</dc:date>
+      <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/ausland/europa/slowakei-zensur-100.html"><img src="https://images.tagesschau.de/image/baa68d5b-ebb0-43c1-aa2a-41312e825604/AAABncOixsw/AAABnSSvrFg/16x9-big/slowakei-proteste-kultur-100.jpg?width=1920" alt="Menschen demonstrieren gegen die Kulturpolitik der slowakischen Regierung. | Pavel Neubauer/TASR/dpa" /></a> <br/> <br/>Künstler verlieren ihre Engagements, Journalisten werden entlassen, das Fernsehen zeigt verstärkt Heimat-Folklore - und Sendungen mit Premier Fico. Viele im EU-Land Slowakei werten das als klare Zensur und protestieren. <em>Von M. Allweiss.</em>[<a href="https://www.tagesschau.de/ausland/europa/slowakei-zensur-100.html">mehr</a>]</p>]]></content:encoded>
     </item>
     <item>
       <title>Mögliche Hormus-Mission: Bundeswehr verlegt Minenjagdboot ins Mittelmeer</title>
