@@ -116,7 +116,7 @@ def add_task(_title: Optional[str], _url: str, _last_update: Optional[float], _l
             (_title, _last_update, _last_status_code, _last_status_text, _last_error, _url)
         )
 
-    _task: int = _cursor.fetchone()[0]
+    _task: int = int(_cursor.fetchone()[0])
 
     _conn.commit()
     _conn.close()
@@ -138,11 +138,11 @@ def add_product(_title: str, _url: str, _currency: str, _last_price: int, _last_
             (_last_price, _last_update, _url)
         )
 
-    _base_price: int = _cursor.fetchone()[0]
+    _base_price: int = int(_cursor.fetchone()[0])
 
     _conn.commit()
 
-    if bool(_base_price) and (((_last_update - _base_price)/_base_price) > -0.05):
+    if bool(_base_price) and (abs((_last_price - _base_price)/_base_price) >= 0.05):
         _conn.close()
         return _title
 
@@ -152,7 +152,7 @@ def add_product(_title: str, _url: str, _currency: str, _last_price: int, _last_
     return _title
 
 def add_price(_title: str, _task: int, _url: str, _created: float, _price: int, _currency: str, _offers: int, _status_code: int, _status_text: str, _error: Optional[str]):
-    add_product(_title, _url, _currency, _price, _created)
+    add_product(_title, _url, _currency, int(_price), _created)
 
     _conn = sqlite3.connect(DATABASE)
     _cursor = _conn.cursor()
@@ -172,12 +172,12 @@ def import_prices(_import: str):
 
     try:
         with open(_import, mode='r') as _file:
-            _prices: List[Tuple] = [tuple(_entry.split(',')) for _entry in _file.readlines()[1:] if _entry.strip()]
+            _prices: List[Tuple] = [tuple(_entry.strip().split(',')) for _entry in _file.readlines()[1:] if _entry.strip()]
     except Exception as e:
         return
 
     for _price in _prices:
-        _price: Tuple = tuple((_entry if _entry else None) for _entry in _price[1:])
+        _price: Tuple = tuple((_entry if _entry else None) for _entry in _price)
         add_price(*_price)
 
 def export_prices(_url: str, _export: str):
@@ -191,7 +191,7 @@ def export_prices(_url: str, _export: str):
 
     with open(_export, mode='w') as _file:
         _file.write('product_id,task_id,url,created,price,currency,offers,status_code,status_text,error\n')
-        _file.write(''.join(_prices))
+        _file.write('\n'.join(_prices))
         _file.write('\n')
 
     _conn.commit()
