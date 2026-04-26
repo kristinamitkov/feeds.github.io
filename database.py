@@ -149,6 +149,9 @@ def add_product(_title: str, _url: str, _currency: str, _last_price: int, _last_
     _cursor.execute("UPDATE product SET base_price=last_price WHERE url=?;", (_url,))
     _cursor.execute("UPDATE task SET priority=25 WHERE url=?;", (_url,))
 
+    _conn.commit()
+    _conn.close()
+
     return _title
 
 def add_price(_title: str, _task: int, _url: str, _created: float, _price: int, _currency: str, _offers: int, _status_code: int, _status_text: str, _error: Optional[str]):
