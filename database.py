@@ -142,7 +142,7 @@ def add_product(_title: str, _url: str, _currency: str, _last_price: int, _last_
 
     _conn.commit()
 
-    if bool(_base_price) and (((_last_price - _base_price)/_base_price) > -0.05):
+    if bool(_base_price) and (abs((_last_price - _base_price)/_base_price) >= 0.05):
         _conn.close()
         return _title
 
