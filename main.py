@@ -10,16 +10,16 @@ def check_update_priority(_row: Tuple):
     _delta = (time.time() - _row[5]) // 10000
 
     _priority: int = _row[4]
-    if (1 >= _row[4] >= 24) and (_delta >= 1):
+    if (1 >= _row[4] >= 24) and (_priority >= 1):
         return True
 
-    if (25 >= _row[4] >= 36) and (_delta >= 6):
+    if (25 >= _row[4] >= 36) and (_priority >= 6):
         return True
 
-    if (37 >= _row[4] >= 50) and (_delta >= 12):
+    if (37 >= _row[4] >= 50) and (_priority >= 12):
         return True
 
-    if (_row[4] >= 51) and (_delta >= 24):
+    if (_row[4] >= 51) and (_priority >= 24):
         return True
 
     return False

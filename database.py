@@ -155,7 +155,6 @@ def add_product(_title: str, _url: str, _currency: str, _last_price: int, _last_
     return _title
 
 def add_price(_title: str, _task: int, _url: str, _created: float, _price: int, _currency: str, _offers: int, _status_code: int, _status_text: str, _error: Optional[str]):
-    _task = add_task(_title, _url, _created, _status_code, _status_text, _error)
     add_product(_title, _url, _currency, int(_price), _created)
 
     _conn = sqlite3.connect(DATABASE)
@@ -171,7 +170,7 @@ def add_price(_title: str, _task: int, _url: str, _created: float, _price: int, 
     _conn.commit()
     _conn.close()
 
-def import_prices(_url: str, _import: str):
+def import_prices(_title: Optional[str], _url: str, _import: str):
     print('Importing to DB', _import)
 
     try:
@@ -180,11 +179,26 @@ def import_prices(_url: str, _import: str):
     except Exception as e:
         return
 
+    _conn = sqlite3.connect(DATABASE)
+    _cursor = _conn.cursor()
+
+    _cursor.execute('SELECT id FROM task WHERE url=?', (_url,))
+    _task: int = (_cursor.fetchone() or [0])[0]
+
+    _conn.close()
+
+    if not _task:
+        if _prices:
+            _price = _prices[-1]
+            _task = _task or add_task(_price[0], _url, _price[2], _price[6], _price[7], _price[8])
+        else:
+            _task = add_task(_title, _url, None, None, None, None)
+
     for _price in _prices:
         _price: Tuple = tuple((_entry if _entry else None) for _entry in _price)
-        add_price(*((_price[0], 0) + _price[1:]))
+        add_price(*((_price[0], _task) + _price[1:]))
 
-def export_prices(_url: str, _export: str):
+def export_prices(_title: Optional[str], _url: str, _export: str):
     print('Exporting DB', _url, _export)
 
     _conn = sqlite3.connect(DATABASE)
@@ -216,10 +230,19 @@ if __name__ == '__main__':
         create_db()
 
     if _args['url'] and _args['import']:
-        import_prices( _args['url'], _args['import'])
+        import_prices(_args['title'] if _args['title'] else None, _args['url'], _args['import'])
+
+    if _args['url'] and (not _args['import']) and (not _args['export']):
+        _conn = sqlite3.connect(DATABASE)
+        _cursor = _conn.cursor()
+        _cursor.execute('SELECT * FROM task WHERE url=?;', (_args['url'],))
+        _task: int = (_cursor.fetchone() or [0])[0]
+        _conn.close()
+        if not _task:
+            add_task(_args['title'] if _args['title'] else None, _args['url'], None, None, None, None)
 
     if _args['prune']:
         prune_prices()
 
     if _args['url'] and _args['export']:
-        export_prices(_args['url'], _args['export'])
+        export_prices(_args['title'] if _args['title'] else None, _args['url'], _args['export'])
