@@ -155,6 +155,7 @@ def add_product(_title: str, _url: str, _currency: str, _last_price: int, _last_
     return _title
 
 def add_price(_title: str, _task: int, _url: str, _created: float, _price: int, _currency: str, _offers: int, _status_code: int, _status_text: str, _error: Optional[str]):
+    _task = add_task(_title, _url, _created, _status_code, _status_text, _error)
     add_product(_title, _url, _currency, int(_price), _created)
 
     _conn = sqlite3.connect(DATABASE)
@@ -170,7 +171,7 @@ def add_price(_title: str, _task: int, _url: str, _created: float, _price: int, 
     _conn.commit()
     _conn.close()
 
-def import_prices(_import: str):
+def import_prices(_url: str, _import: str):
     print('Importing to DB', _import)
 
     try:
@@ -181,7 +182,7 @@ def import_prices(_import: str):
 
     for _price in _prices:
         _price: Tuple = tuple((_entry if _entry else None) for _entry in _price)
-        add_price(*_price)
+        add_price(*((_price[0], 0) + _price[1:]))
 
 def export_prices(_url: str, _export: str):
     print('Exporting DB', _url, _export)
@@ -190,10 +191,10 @@ def export_prices(_url: str, _export: str):
     _cursor = _conn.cursor()
 
     _cursor.execute('SELECT * FROM price WHERE url=? ORDER BY created ASC;', (_url,))
-    _prices: List[str] = [','.join((str(__entry) if __entry is not None else '') for __entry in _entry[1:]) for _entry in _cursor.fetchall() if _entry]
+    _prices: List[str] = [','.join((str(__entry) if __entry is not None else '') for __entry in (_entry[1],) + _entry[3:]) for _entry in _cursor.fetchall() if _entry]
 
     with open(_export, mode='w') as _file:
-        _file.write('product_id,task_id,url,created,price,currency,offers,status_code,status_text,error\n')
+        _file.write('product_id,url,created,price,currency,offers,status_code,status_text,error\n')
         _file.write('\n'.join(_prices))
         _file.write('\n')
 
@@ -214,14 +215,11 @@ if __name__ == '__main__':
     if _args['init']:
         create_db()
 
-    if _args['import']:
-        import_prices(_args['import'])
+    if _args['url'] and _args['import']:
+        import_prices( _args['url'], _args['import'])
 
     if _args['prune']:
         prune_prices()
 
     if _args['url'] and _args['export']:
         export_prices(_args['url'], _args['export'])
-    elif _args['url']:
-        assert(_args['url'].startswith('http://') or _args['url'].startswith('https://'))
-        add_task(_args['title'] if _args['title'] else None, _args['url'], None, None, None, None)

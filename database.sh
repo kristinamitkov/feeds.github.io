@@ -36,7 +36,7 @@ while IFS=',' read -r arg1 arg2 arg3; do
     if [ "$INIT" = true ]; then
         python database.py --title "$arg1" --url "$arg2"
         if [ -n "$arg3" ] && [[ "$arg3" =~ \.csv$ ]]; then
-            python database.py --import "data/$arg3" || true
+            python database.py --url "$arg2" --import "data/$arg3" || true
         fi
     elif [ "$EXPORT" = true ]; then
         if [ -n "$arg3" ]; then
